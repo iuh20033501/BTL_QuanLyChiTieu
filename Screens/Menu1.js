@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View,Image, Fit } from 'react-native';
 import DateTimePicker from "react-datetime-picker";
 import 'react-datetime-picker/dist/DateTimePicker.css';
@@ -132,15 +132,12 @@ export default function Menu1({navigation}) {
        
           {!show&&(
             <View style={{flexDirection:'column'}} >
-              <View style={{flexDirection:'row', height: click ? 320 : 50 ,justifyContent:'flex-start'}}>
+              <View style={{flexDirection:'row', height: click ? 320 : 20 ,justifyContent:'flex-start'}}>
            
               <Text style={styles.Text}>{`${value.getDate()}/${value.getMonth() + 1}/${value.getFullYear()}`}</Text>
               <TouchableOpacity onPress={clickMouse}>
               <Text style={styles.Text}>{click ? 'OK' : 'DATE'}</Text>
                 </TouchableOpacity>
-         
-             
-                 {/* <TouchableOpacity onPress={()=>navigation.navigate('Datepicker')}><Text>Chọn ngày</Text></TouchableOpacity> */}
                 </View>
                 {click&&( <DateTimePicker
             onChange={setValue}
@@ -177,17 +174,20 @@ export default function Menu1({navigation}) {
          
            )}
            {show&&(
-            <View >
-              <View style={{ height:40,flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
-                 <Text style={styles.Text}>Ngày</Text>
-                 <TouchableOpacity style={{marginLeft:10,marginRight:20}} > 
-                     <Text style={{fontSize:20,fontWeight:'bold'}}>&lt;</Text> 
-                 </TouchableOpacity>
-                  <TextInput style={styles.Input} placeholder=" YYYY-MM-DD" ></TextInput>
-                  <TouchableOpacity style={{marginLeft:10,marginRight:20}} > 
-                     <Text style={{fontSize:20,fontWeight:'bold'}}>&gt;</Text> 
-                 </TouchableOpacity>
-                </View>
+            <View>
+               <View style={{flexDirection:'row', height: click ? 320 : 20 ,justifyContent:'flex-start'}}>
+           
+           <Text style={styles.Text}>{`${value.getDate()}/${value.getMonth() + 1}/${value.getFullYear()}`}</Text>
+           <TouchableOpacity onPress={clickMouse}>
+           <Text style={styles.Text}>{click ? 'OK' : 'DATE'}</Text>
+             </TouchableOpacity>
+             </View>
+             {click&&( <DateTimePicker
+         onChange={setValue}
+         value={value}
+         isCalendarOpen
+         onCalendarClose={clickMouse}
+     />)}
                 <View style={{ height:40,width:'100%',flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
                   <Text style={styles.Text}>Ghi chú </Text>
                   <TextInput style={{borderWidth:1,borderColor:'#808080',backgroundColor:'white',height:'90%', marginLeft:10,width:300}} placeholder='Chưa nhập vào'></TextInput>

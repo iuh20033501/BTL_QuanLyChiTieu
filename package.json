@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@expo/webpack-config": "^19.0.0",
+    "@fortawesome/fontawesome-svg-core": "^6.4.2",
+    "@fortawesome/free-solid-svg-icons": "^6.4.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@react-native-community/datetimepicker": "^7.2.0",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.17",

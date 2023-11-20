@@ -9,13 +9,8 @@
   import { createNativeStackNavigator } from '@react-navigation/native-stack';
   import { NavigationContainer } from '@react-navigation/native';
   import Datepicker from './Screens/Datepicker';
- import DoughnutChart from './Screens/Chart';
+ import DoughnutChart from './Screens/ChartChi';
  import { useState,useEffect } from 'react';
-import TEST from './Screens/test';
-
-  
-
-
 
   export default function App() {
      const stack = createNativeStackNavigator();

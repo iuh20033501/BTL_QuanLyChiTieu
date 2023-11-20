@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart,ArcElement } from "chart.js";
-
+import { faSquare } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 Chart.register(ArcElement);
 
-const DoughnutChart = () => {
+const DoughnutChart2 = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
     fetch('https://6551ee245c69a779032948e9.mockapi.io/data')
       .then((response) => response.json())
       .then((json) => {
-        setData(json);
+        const dataChi = json.filter((item) => item.status === false);
+        setData(dataChi);
       });
   }, []);
   // useEffect(() => {
@@ -48,7 +50,7 @@ const DoughnutChart = () => {
   const backgroundColors = Array.from({length: data.length}, () => getRandomColor());
 
   console.log(names)
-  const chartData = {
+  const chartData2 = {
     labels:  names,
     datasets: [
       {
@@ -67,6 +69,9 @@ const DoughnutChart = () => {
         font: {
           weight: 'bold',
         },
+        // formatter: (value, context) => {
+        //   return `$${value}`;
+        // },
       },
     },
     title: {
@@ -75,7 +80,20 @@ const DoughnutChart = () => {
     },
   };
 
-  return <Doughnut data={chartData} options={options} />;
+  return (
+    <div>
+      <Doughnut data={chartData2} options={options} />
+      <p>Danh sách chi tiêu:</p>
+      <ul>
+        {data.map((item, index) => (
+          <li key={item.id} style={{ color: backgroundColors[index] }}>
+             <FontAwesomeIcon icon={faSquare} style={{width:50}} />
+            {item.name}: {item.money}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
-export default DoughnutChart;
+export default DoughnutChart2;
