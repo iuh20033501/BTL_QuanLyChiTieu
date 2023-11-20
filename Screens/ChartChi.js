@@ -44,14 +44,13 @@ const DoughnutChart2 = () => {
   // Chuyển đổi dữ liệu từ mảng đối tượng thành các mảng thích hợp cho biểu đồ
   const names = data.map((item) => item.name);
   const amounts = data.map((item) => item.money);
-
-  const testname = data.forEach((item) => item.name);
+ 
   // Tạo mảng màu ngẫu nhiên
   const backgroundColors = Array.from({length: data.length}, () => getRandomColor());
 
   console.log(names)
   const chartData2 = {
-    labels:  names,
+    labels: data.map((item) => item.name),
     datasets: [
       {
         data: amounts,
@@ -69,9 +68,7 @@ const DoughnutChart2 = () => {
         font: {
           weight: 'bold',
         },
-        // formatter: (value, context) => {
-        //   return `$${value}`;
-        // },
+        
       },
     },
     title: {
