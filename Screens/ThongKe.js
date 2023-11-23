@@ -20,7 +20,7 @@ export default function ThongKe({navigation}) {
     // const [datachi, setDataChi] = useState([]);
     const [click,setClick] = useState(false)
     const [value,setValue] = useState(new Date())
-
+     const[ngay,setNgay]=useState();
     const clickMouse = () => {
       // Khi TouchableOpacity được nhấp, chuyển giá trị click sang true
      if(click===false) setClick(true);
@@ -34,7 +34,14 @@ export default function ThongKe({navigation}) {
           setData(json);
         });
     }, []);
-
+    useEffect(() => {
+      setNgay(value)
+  },[value])
+    // useEffect(()=>{
+    //   setNgay(`${value.getDate()}/${value.getMonth() + 1}/${value.getFullYear()}`);
+    //   console.log(ngay)
+    // },[])
+    
   // Tính tổng chi
   const calculateTotalChi = () => {
     return data.reduce((total1, item) => {
@@ -79,12 +86,12 @@ console.log(chenhLech)
          {thang&&(
             <View >
               <View style={{flexDirection:'column', width:'80%'}}>
-              <View style={{flexDirection:'row', height: click ? 320 : 20 ,justifyContent:'flex-start'}}>
+              <View style={{flexDirection:'row', height: click ? 320 : 40 ,justifyContent:'flex-start',alignItems:'center',marginLeft:20}}>
            <Text style={styles.Text2}>{`${value.getDate()}/${value.getMonth() + 1}/${value.getFullYear()}`}</Text>
-           <TouchableOpacity onPress={clickMouse}>
+           <TouchableOpacity onPress={clickMouse} style={styles.Buttun2}>
            <Text style={styles.Text2}>{click ? 'OK' : 'DATE'}</Text>
              </TouchableOpacity>
-             </View>
+             </View >
              {click&&( <DateTimePicker
          onChange={setValue}
          value={value}
@@ -124,7 +131,7 @@ console.log(chenhLech)
               {!show&& (
                 <View style={{height:400,width:"100%", alignItems:'center'}}>
                                           <Text style={{fontSize:18, fontWeight:'bold', marginLeft:10}}>BIỂU ĐỒ CHI</Text>
-                                          <ScrollView><DoughnutChart2></DoughnutChart2></ScrollView>
+                                          <ScrollView><DoughnutChart2 ngay={ngay} months={"1"} ></DoughnutChart2></ScrollView>
                   
                 </View>
                 
@@ -133,7 +140,7 @@ console.log(chenhLech)
                 <View style={{height:400,width:"100%",alignItems:'center'}}>
                                                             <Text style={{fontSize:18, fontWeight:'bold', marginLeft:10}}>BIỂU ĐỒ THU</Text>
 
-                    <ScrollView><DoughnutChart></DoughnutChart>  </ScrollView>  
+                    <ScrollView><DoughnutChart  ngay={ngay} months={"1"}></DoughnutChart>  </ScrollView>  
                 </View>
               )}
             </View>
@@ -141,9 +148,9 @@ console.log(chenhLech)
            {!thang&&(
             <View >
               <View style={{flexDirection:'column', width:'80%'}}>
-              <View style={{flexDirection:'row', height: click ? 320 : 20 ,justifyContent:'flex-start'}}>
+              <View style={{flexDirection:'row', height: click ? 320 : 40 ,justifyContent:'flex-start',alignItems:'center',marginLeft:20}}>
            <Text style={styles.Text2}>{`${value.getDate()}/${value.getMonth() + 1}/${value.getFullYear()}`}</Text>
-           <TouchableOpacity onPress={clickMouse}>
+           <TouchableOpacity onPress={clickMouse} style={styles.Buttun2}>
            <Text style={styles.Text2}>{click ? 'OK' : 'DATE'}</Text>
              </TouchableOpacity>
              </View>
@@ -181,18 +188,18 @@ console.log(chenhLech)
                 <Text style={{color:show2?'#FFA500':'gray',fontWeight:'bold'}}>Thu nhập </Text>
                 </TouchableOpacity>
              </View>
-             {!show&& (
+             {!show2&& (
                 <View style={{height:250,width:"100%", alignItems:'center'}}>
                                           <Text style={{fontSize:18, fontWeight:'bold', marginLeft:10}}>BIỂU ĐỒ CHI</Text>
-                  <DoughnutChart2></DoughnutChart2>
+                  <DoughnutChart2 ngay={ngay} months={"12"}></DoughnutChart2>
                 </View>
                 
               )}
-              {show&& (
+              {show2&& (
                 <View style={{height:250,width:"100%",alignItems:'center'}}>
                                                             <Text style={{fontSize:18, fontWeight:'bold', marginLeft:10}}>BIỂU ĐỒ THU</Text>
 
-                     <DoughnutChart></DoughnutChart>   
+                     <DoughnutChart ngay={ngay} months={"12"}></DoughnutChart>   
                 </View>
               )}
             </View>
@@ -236,7 +243,8 @@ const styles = StyleSheet.create({
   Text2:{
     fontSize:16,
     fontWeight:'bold',
-    marginLeft:10,
+    
+   
 },
   Text:{
     fontSize:12,
@@ -250,6 +258,14 @@ const styles = StyleSheet.create({
     borderRadius:8,
     justifyContent:'center',
     alignItems:'center'
+  },
+  Buttun2:{
+    width:'100',
+    backgroundColor:'#FFA500',
+    borderRadius:8,
+    justifyContent:'center',
+    alignItems:'center',
+    marginLeft:150
   },
   Touch:{
     width:'50%',

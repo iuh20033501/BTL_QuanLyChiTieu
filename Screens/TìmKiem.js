@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 export default function TimKiem({navigation}) {
-  const[nhap,setNhap]= useState(2);
+  const[nhap,setNhap]= useState(0);
   const[chi,setChi]= useState(0);
  
   return (

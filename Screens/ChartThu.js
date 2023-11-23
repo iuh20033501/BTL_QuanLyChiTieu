@@ -5,18 +5,65 @@ import { faSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 Chart.register(ArcElement);
 
-const DoughnutChart = () => {
+const DoughnutChart =  ({ ngay, months }) => {
   const [data, setData] = useState([]);
-
+  console.log(ngay)
+  console.log(months)
   useEffect(() => {
-    fetch('https://6551ee245c69a779032948e9.mockapi.io/data')
-      .then((response) => response.json())
-      .then((json) => {
-        const dataThu = json.filter((item) => item.status === true);
+   fetch('https://6551ee245c69a779032948e9.mockapi.io/data')
+     .then((response) => response.json())
+     .then((json) => {
+       const dataChi = json.filter((item) => {
+         // Chuyển đổi giá trị ngay thành đối tượng Date
+         
+         const ngayDate = ngay;
+ 
+         // Chuyển đổi giá trị item.date thành đối tượng Date
+         const itemDateParts = item.date.split('/');
+         const itemDate = new Date(
+           parseInt(itemDateParts[2]),
+           parseInt(itemDateParts[1]) - 1,
+           parseInt(itemDateParts[0])
+         );
+ 
+         // Lọc dữ liệu với điều kiện status === false, view === true và item.date nằm trong khoảng thời gian ngay đến ngay + 1 tháng
+         return item.status && item.view && isDateWithinRange(itemDate, ngayDate, addMonths(ngayDate, months));
+       });
+       setData(dataChi);
+     });
+ }, [ngay]);
+ 
+ // Hàm kiểm tra xem date có nằm trong khoảng thời gian startDate đến endDate không
+ const isDateWithinRange = (date, startDate, endDate) => {
+   return date >= startDate && date < endDate;
+ };
+ 
+ // Hàm thêm tháng cho một ngày cụ thể
+ const addMonths = (date, months) => {
+  const result = new Date(date);
 
-        setData(dataThu);
-      });
-  }, []);
+  // Lấy ra thông tin về ngày, tháng và năm
+  const currentMonth = result.getMonth();
+  const currentYear = result.getFullYear();
+  const currentDay = result.getDate();
+
+  // Tính toán tháng mới
+  const newMonth = (currentMonth + months) % 12;
+  const monthsToAdd = Math.floor((currentMonth + months) / 12);
+
+  // Tính toán năm mới
+  const newYear = currentYear + monthsToAdd;
+
+  // Thiết lập tháng và năm mới
+  result.setMonth(newMonth);
+  result.setFullYear(newYear);
+
+  // Tránh tình huống khi tháng mới có số ngày ít hơn tháng cũ (đến ngày 31 tháng 1 chẳng hạn)
+  const newMonthDays = new Date(newYear, newMonth + 1, 0).getDate();
+  result.setDate(Math.min(currentDay, newMonthDays));
+
+  return result;
+};
   // useEffect(() => {
    
   //   if (route.params && route.params.da) {

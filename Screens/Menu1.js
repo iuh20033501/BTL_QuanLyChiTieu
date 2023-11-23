@@ -15,20 +15,23 @@ export default function Menu1({navigation}) {
 
   };
   const [data, setData] = useState([]);
+
   useEffect(() => {
     fetch('https://6551ee245c69a779032948e9.mockapi.io/data')
         .then((response) => response.json())
         .then((json) => {
             setData(json)
-           
         })
   }, []);
-  
+
 
   
    const [show,Setshow] = useState(false)
    const [tien,Settien] = useState(0)
    const [date,Setdate] = useState(false)
+   const [chi,Setchi] = useState(0)
+   const [thu,Setthu] = useState(0)
+   const[note,SetNote]=useState()
    const [chitieu, setChitieu] = useState([
     {
       id: 1,
@@ -125,7 +128,6 @@ export default function Menu1({navigation}) {
              <TouchableOpacity style={{ width:'50%',backgroundColor:show?'#FFA500':"#808080", borderRadius:8,justifyContent:'center',alignItems:'center'}} onPress={()=>Setshow(true)}>
              <Text style={{color:show?'white':'#FFA500',fontWeight:'bold'}}>Tiền thu</Text>
              </TouchableOpacity>
-
             </View>
            
          </View>
@@ -140,24 +142,24 @@ export default function Menu1({navigation}) {
                 </TouchableOpacity>
                 </View>
                 {click&&( <DateTimePicker
-            onChange={setValue}
-            value={value}
-            isCalendarOpen
-            onCalendarClose={clickMouse}
+             onChange={setValue}
+             value={value}
+             isCalendarOpen
+             onCalendarClose={clickMouse}
         />)}
                 <View style={{ height:40,width:'100%',flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
                   <Text style={styles.Text}>Ghi chú </Text>
-                  <TextInput style={{borderWidth:1,borderColor:'#808080',backgroundColor:'white',height:'90%', marginLeft:10,width:300}} placeholder='Chưa nhập vào'></TextInput>
+                  <TextInput style={{borderWidth:1,borderColor:'#808080',backgroundColor:'white',height:'90%', marginLeft:10,width:300}}  onChangeText={(text)=>{SetNote(text)}} placeholder='Chưa nhập vào'></TextInput>
                 </View>
                 <View style={{ height:40,flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
                   <Text style={styles.Text}>Tiền Chi </Text>
-                  <TextInput style={{borderWidth:1,borderColor:'#808080',backgroundColor:'white',height:'90%', marginLeft:10,width:250}} value={tien}></TextInput>
+                  <TextInput style={{borderWidth:1,borderColor:'#808080',backgroundColor:'white',height:'90%', marginLeft:10,width:250}} value={tien} onChangeText={(text)=>{Settien(text)}}></TextInput>
                   <Text>đ</Text>
                  </View> 
                  <Text style={styles.Text}>Danh mục </Text>
                  <View style={styles.List}> 
                   {chitieu.map((item, index) => (
-                      <TouchableOpacity style={{backgroundColor:'white',height:"33%",width:'33%',justifyContent:'center',alignItems:'center'}} key={index}  onMouseEnter={() => setHoveredItemId(item.id)}  onMouseLeave={() => setHoveredItemId(null)}>
+                      <TouchableOpacity style={{backgroundColor:'white',height:"33%",width:'33%',justifyContent:'center',alignItems:'center'}} key={index}  onMouseEnter={() => setHoveredItemId(item.id)} onPress={()=>Setchi(item.id)} onMouseLeave={() => setHoveredItemId(chi)}>
                         <View style={{backgroundColor: hoveredItemId === item.id ? '#FFA500':'white',justifyContent:'center',flexDirection:'column',alignItems:'center',height:'100%',width:'100%'}} >
                             <Image source={item.image} style={styles.Img}></Image>
                             <Text style={{color: hoveredItemId === item.id ? 'white':'gray'}}>{item.name}</Text>
@@ -190,17 +192,17 @@ export default function Menu1({navigation}) {
      />)}
                 <View style={{ height:40,width:'100%',flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
                   <Text style={styles.Text}>Ghi chú </Text>
-                  <TextInput style={{borderWidth:1,borderColor:'#808080',backgroundColor:'white',height:'90%', marginLeft:10,width:300}} placeholder='Chưa nhập vào'></TextInput>
+                  <TextInput style={{borderWidth:1,borderColor:'#808080',backgroundColor:'white',height:'90%', marginLeft:10,width:300}} placeholder='Chưa nhập vào'  onChangeText={(text)=>{SetNote(text)}}></TextInput>
                 </View>
                 <View style={{ height:40,flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
                   <Text style={styles.Text}>Tiền Thu </Text>
-                  <TextInput style={{borderWidth:1,borderColor:'#808080',backgroundColor:'white',height:'90%', marginLeft:10,width:250}} value={tien}></TextInput>
+                  <TextInput style={{borderWidth:1,borderColor:'#808080',backgroundColor:'white',height:'90%', marginLeft:10,width:250}} value={tien}  onChangeText={(text)=>{Settien(text)}}></TextInput>
                   <Text>đ</Text>
                  </View> 
                  <Text style={styles.Text}>Danh mục </Text>
                  <View style={styles.List}> 
                  {thuNhap.map((item, index) => (
-                      <TouchableOpacity style={{backgroundColor: hoveredItemId === item.id ? '#FFA500':'white',height:"33%",width:'33%',justifyContent:'center',alignItems:'center'}} key={index}  onMouseEnter={() => setHoveredItemId(item.id)}  onMouseLeave={() => setHoveredItemId(null)}>
+                      <TouchableOpacity style={{backgroundColor: hoveredItemId === item.id ? '#FFA500':'white',height:"33%",width:'33%',justifyContent:'center',alignItems:'center'}} key={index}  onMouseEnter={() => setHoveredItemId(item.id)} onPress={()=>Setthu(item.id)}  onMouseLeave={() => setHoveredItemId(thu)}>
                         <View style={{justifyContent:'center',flexDirection:'column',alignItems:'center',height:'100%',width:'100%'}} >
                             <Image source={item.image} style={styles.Img}></Image>
                             <Text style={{color: hoveredItemId === item.id ? 'white':'gray'}}>{item.name}</Text>
