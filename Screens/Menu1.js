@@ -175,7 +175,7 @@ export default function Menu1({navigation}) {
        
           {!show&&(
             <View style={{flexDirection:'column'}} >
-              <View style={{flexDirection:'row', height: click ? 320 : 40 ,justifyContent:'flex-start'}}>
+              <View style={{flexDirection:'row', height: click ? 320 : 40 ,justifyContent:'flex-start',alignItems:'center',marginLeft:20}}>
            
               <Text style={styles.Text}>{`${value.getDate()}/${value.getMonth() + 1}/${value.getFullYear()}`}</Text>
               <TouchableOpacity onPress={clickMouse} style={styles.Buttun2}>
@@ -194,7 +194,7 @@ export default function Menu1({navigation}) {
                 </View>
                 <View style={{ height:40,flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
                   <Text style={styles.Text}>Tiền Chi </Text>
-                  <TextInput style={{borderWidth:1,borderColor:'#808080',backgroundColor:'white',height:'90%', marginLeft:10,width:250}} value={tien} onChangeText={(text)=>{Settien(text)}}></TextInput>
+                  <TextInput style={{borderWidth:1,borderColor:'#808080',backgroundColor:'white',height:'90%', marginLeft:10,width:250}} value={tien}  onChangeText={(text)=>{ const numericValue = parseFloat(text); ;Settien(isNaN(numericValue) ? 0 : numericValue)}}></TextInput>
                   <Text>đ</Text>
                  </View> 
                  <Text style={styles.Text}>Danh mục </Text>
@@ -218,7 +218,7 @@ export default function Menu1({navigation}) {
            )}
            {show&&(
             <View>
-               <View style={{flexDirection:'row', height: click ? 320 : 40 ,justifyContent:'flex-start'}}>
+               <View style={{flexDirection:'row', height: click ? 320 : 40 ,justifyContent:'flex-start',alignItems:'center',marginLeft:20}}>
            
            <Text style={styles.Text}>{`${value.getDate()}/${value.getMonth() + 1}/${value.getFullYear()}`}</Text>
            <TouchableOpacity onPress={clickMouse} style={styles.Buttun2}>
@@ -237,7 +237,7 @@ export default function Menu1({navigation}) {
                 </View>
                 <View style={{ height:40,flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
                   <Text style={styles.Text}>Tiền Thu </Text>
-                  <TextInput style={{borderWidth:1,borderColor:'#808080',backgroundColor:'white',height:'90%', marginLeft:10,width:250}} value={tien}  onChangeText={(text)=>{Settien(text)}}></TextInput>
+                  <TextInput style={{borderWidth:1,borderColor:'#808080',backgroundColor:'white',height:'90%', marginLeft:10,width:250}} value={tien}  onChangeText={(text)=>{ const numericValue = parseFloat(text); ;Settien(isNaN(numericValue) ? 0 : numericValue)}}></TextInput>
                   <Text>đ</Text>
                  </View> 
                  <Text style={styles.Text}>Danh mục </Text>
