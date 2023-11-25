@@ -3,26 +3,27 @@ import { Doughnut } from 'react-chartjs-2';
 import { Chart,ArcElement } from "chart.js";
 import { faSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
 Chart.register(ArcElement);
 var dl =[]
 
-  export const CalculateTotalChi = () => {
+  // export const CalculateTotalChi = () => {
 
   
-    return dl.reduce((total1, item) => {
-      if (!item.status) {
-        // Chi tiêu (status: false)
-        return total1 + item.money;
-      }
-      return total1;
-    }, 0);
+  //   return dl.reduce((total1, item) => {
+  //     if (!item.status) {
+  //       // Chi tiêu (status: false)
+  //       return total1 + item.money;
+  //     }
+  //     return total1;
+  //   }, 0);
   
 
-  };
-
+  // };
+ 
 
 const DoughnutChart2 =  ({ ngay, months }) => {
- 
+  const [hoveredItemId, setHoveredItemId] = useState(null);
   const [data2, setData2] = useState([]);
   const [data, setData] = useState([]);
    console.log(ngay)
@@ -179,6 +180,15 @@ const DoughnutChart2 =  ({ ngay, months }) => {
           </li>
         ))}
       </ul>
+      <ScrollView>
+        {data.map((item,index)=>{
+          <TouchableOpacity style={{backgroundColor:'white',height:50,width:'100%',justifyContent:'center',alignItems:'center'}} key={index}  onMouseEnter={() => setHoveredItemId(item.id)} onPress={()=>{Setchi(item.id);SetName(item.name);SetImg(item.image)}} onMouseLeave={() => setHoveredItemId(chi)}>
+            <View style={{backgroundColor: hoveredItemId === item.id ? '#FFA500':'white',justifyContent:'center',flexDirection:'column',alignItems:'center',height:'100%',width:'100%'}} >
+              <Text style={{color: hoveredItemId === item.id ? 'white':'gray'}}>{item.name}</Text>
+           </View>
+        </TouchableOpacity>
+        })}
+      </ScrollView>
     </div>
   );
 };

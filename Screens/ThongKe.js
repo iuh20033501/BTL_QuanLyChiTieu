@@ -25,50 +25,98 @@ export default function ThongKe({navigation}) {
      else  setClick(false)
   
     };
-  //   useEffect(() => {
-  //     fetch('https://6551ee245c69a779032948e9.mockapi.io/data')
-  //       .then((response) => response.json())
-  //       .then((json) => {
-  //         setData(json);
-  //       });
-  //   }, []);
+
+      useEffect(() => {
+       fetch('https://6551ee245c69a779032948e9.mockapi.io/data')
+         .then((response) => response.json())
+         .then((json) => {
+           const dataChi = json.filter((item) => {
+             // Chuyển đổi giá trị ngay thành đối tượng Date
+             const ngayDate = ngay;
+     
+             // Chuyển đổi giá trị item.date thành đối tượng Date
+             const itemDateParts = item.date.split('/');
+             const itemDate = new Date(
+               parseInt(itemDateParts[2]),
+               parseInt(itemDateParts[1]) - 1,
+               parseInt(itemDateParts[0])
+             );
+             if (thang)
+             // Lọc dữ liệu với điều kiện status === false, view === true và item.date nằm trong khoảng thời gian ngay đến ngay + 1 tháng
+             return  item.view && isDateWithinRange(itemDate,  addMonths(ngayDate, 1),ngayDate);
+              else  return  item.view && isDateWithinRange(itemDate,  addMonths(ngayDate, 12),ngayDate);
+           });
+           setData(dataChi);
+         });
+     }, [ngay,thang]);
+     
+     
+     
+     // Hàm kiểm tra xem date có nằm trong khoảng thời gian startDate đến endDate không
+     const isDateWithinRange = (date, startDate, endDate) => {
+       // console.log(startDate);
+       // console.log(endDate);
+       return date >= startDate && date < endDate;
+     };
+     
+     // Hàm thêm tháng cho một ngày cụ thể
+     const addMonths = (date, months) => {
+       const result = new Date(date);
+     
+       // Lấy ra thông tin về ngày, tháng và năm
+       const currentMonth = result.getMonth()+1;
+       const currentYear = result.getFullYear();
+       const currentDay = result.getDate();
+       
+     
+       // Tính toán tháng mới
+       const newMonth = ((currentMonth - months + 11) % 12 + 12) % 12;
+       const monthsToAdd = Math.floor((months-currentMonth  + 12) / 12);
+       // Tính toán năm mới
+       const newYear = currentYear - monthsToAdd;
+     
+       // Thiết lập tháng và năm mới
+       result.setMonth(newMonth);
+       result.setFullYear(newYear);
+       
+       // Tránh tình huống khi tháng mới có số ngày ít hơn tháng cũ (đến ngày 31 tháng 1 chẳng hạn)
+       const newMonthDays = new Date(newYear, newMonth+1, 0).getDate();
+       result.setDate(Math.min(currentDay, newMonthDays));
+       return result;
+     };
+    
+      // Tính tổng chi
+       const calculateTotalChi = () => {
+        return data.reduce((total1, item) => {
+          if (!item.status) {
+            // Chi tiêu (status: false)
+            return total1 + item.money;
+          }
+          return total1;
+        }, 0);
+      };
+    
+      // Tính tổng thu
+      const calculateTotalThu = () => {
+        return data.reduce((total, item) => {
+          if (item.status) {
+            // Thu nhập (status: true)
+            return total + item.money;
+          }
+          return total;
+        }, 0);
+      };
+    
+      const totalThu = calculateTotalThu();
+      const totalChi = calculateTotalChi();
+      // Tính chênh lệch
+      const chenhLech = totalThu - totalChi;
     useEffect(() => {
       setNgay(value)
   },[value])
-    // useEffect(()=>{
-    //   setNgay(`${value.getDate()}/${value.getMonth() + 1}/${value.getFullYear()}`);
-    //   console.log(ngay)
-    // },[])
-    
-  // // Tính tổng chi
-  // const calculateTotalChi = () => {
-  //   return data.reduce((total1, item) => {
-  //     if (!item.status) {
-  //       // Chi tiêu (status: false)
-  //       return total1 + item.money;
-  //     }
-  //     return total1;
-  //   }, 0);
-  // };
-
-  // // Tính tổng thu
-  // const calculateTotalThu = () => {
-  //   return data.reduce((total, item) => {
-  //     if (item.status) {
-  //       // Thu nhập (status: true)
-  //       return total + item.money;
-  //     }
-  //     return total;
-  //   }, 0);
-  // };
-
-  const totalThu =0 ;
-  const totalChi =0;
+   
 
 
-  // Tính chênh lệch
-  const chenhLech = Math.abs(totalThu - totalChi);
-console.log(chenhLech)
  return (
     <View style={styles.container}>
              <View style={styles.row}>
@@ -107,7 +155,7 @@ console.log(chenhLech)
                     </View>
                     <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',backgroundColor:"E6E6E6",width:'48%'}}>
                         <Text style={styles.Text}>Thu nhập</Text>
-                      {totalChi}
+                        {totalChi}
                         <Text>đ</Text>
                     </View>
               </View>
