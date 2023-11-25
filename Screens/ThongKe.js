@@ -4,7 +4,6 @@ import { useState,useEffect } from 'react';
 import Datepicker from './Datepicker';
 import DoughnutChart from './ChartThu';
 import DoughnutChart2, { CalculateTotalChi } from './ChartChi';
-import ChenhLechChiTieu from './ChenhLechChiTieu';
   import { Doughnut } from 'react-chartjs-2';
   import { ArcElement } from "chart.js";
 import DateTimePicker from 'react-datetime-picker';
@@ -150,12 +149,12 @@ export default function ThongKe({navigation}) {
                     <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',backgroundColor:"E6E6E6",width:'48%'}}>
                    
                         <Text style={styles.Text}>Chi tiêu</Text>
-                        {totalThu}
+                        {totalChi}
                         <Text>đ</Text>
                     </View>
                     <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',backgroundColor:"E6E6E6",width:'48%'}}>
                         <Text style={styles.Text}>Thu nhập</Text>
-                        {totalChi}
+                        {totalThu}
                         <Text>đ</Text>
                     </View>
               </View>
