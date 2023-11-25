@@ -3,14 +3,11 @@ import { StyleSheet, Text, View ,TouchableOpacity,TextInput, Image,ScrollView} f
 import { useState,useEffect } from 'react';
 import Datepicker from './Datepicker';
 import DoughnutChart from './ChartThu';
-import DoughnutChart2 from './ChartChi';
-import TongChi from './TongChi';
+import DoughnutChart2, { CalculateTotalChi } from './ChartChi';
 import ChenhLechChiTieu from './ChenhLechChiTieu';
   import { Doughnut } from 'react-chartjs-2';
   import { ArcElement } from "chart.js";
 import DateTimePicker from 'react-datetime-picker';
-import TongThu from './TongThu';
-
 
 export default function ThongKe({navigation}) {
     const[show,setShow]= useState(false)
@@ -28,13 +25,13 @@ export default function ThongKe({navigation}) {
      else  setClick(false)
   
     };
-    useEffect(() => {
-      fetch('https://6551ee245c69a779032948e9.mockapi.io/data')
-        .then((response) => response.json())
-        .then((json) => {
-          setData(json);
-        });
-    }, []);
+  //   useEffect(() => {
+  //     fetch('https://6551ee245c69a779032948e9.mockapi.io/data')
+  //       .then((response) => response.json())
+  //       .then((json) => {
+  //         setData(json);
+  //       });
+  //   }, []);
     useEffect(() => {
       setNgay(value)
   },[value])
@@ -43,30 +40,31 @@ export default function ThongKe({navigation}) {
     //   console.log(ngay)
     // },[])
     
-  // Tính tổng chi
-  const calculateTotalChi = () => {
-    return data.reduce((total1, item) => {
-      if (!item.status) {
-        // Chi tiêu (status: false)
-        return total1 + item.money;
-      }
-      return total1;
-    }, 0);
-  };
+  // // Tính tổng chi
+  // const calculateTotalChi = () => {
+  //   return data.reduce((total1, item) => {
+  //     if (!item.status) {
+  //       // Chi tiêu (status: false)
+  //       return total1 + item.money;
+  //     }
+  //     return total1;
+  //   }, 0);
+  // };
 
-  // Tính tổng thu
-  const calculateTotalThu = () => {
-    return data.reduce((total, item) => {
-      if (item.status) {
-        // Thu nhập (status: true)
-        return total + item.money;
-      }
-      return total;
-    }, 0);
-  };
+  // // Tính tổng thu
+  // const calculateTotalThu = () => {
+  //   return data.reduce((total, item) => {
+  //     if (item.status) {
+  //       // Thu nhập (status: true)
+  //       return total + item.money;
+  //     }
+  //     return total;
+  //   }, 0);
+  // };
 
-  const totalThu = calculateTotalThu();
-  const totalChi = calculateTotalChi();
+  const totalThu =0 ;
+  const totalChi =0;
+
 
   // Tính chênh lệch
   const chenhLech = Math.abs(totalThu - totalChi);
@@ -104,12 +102,12 @@ console.log(chenhLech)
                     <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',backgroundColor:"E6E6E6",width:'48%'}}>
                    
                         <Text style={styles.Text}>Chi tiêu</Text>
-                        <TongChi></TongChi>
+                        {totalThu}
                         <Text>đ</Text>
                     </View>
                     <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',backgroundColor:"E6E6E6",width:'48%'}}>
                         <Text style={styles.Text}>Thu nhập</Text>
-                      <TongThu></TongThu>
+                      {totalChi}
                         <Text>đ</Text>
                     </View>
               </View>
@@ -130,19 +128,19 @@ console.log(chenhLech)
              </View>
 
               {!show&& (
-                <View style={{height:400,width:"100%", alignItems:'center'}}>
-                                          <Text style={{fontSize:18, fontWeight:'bold', marginLeft:10}}>BIỂU ĐỒ CHI</Text>
+                <ScrollView style={{height:400,width:"100%"}}>
+                                          <Text style={{fontSize:18, fontWeight:'bold', marginLeft:140}}>BIỂU ĐỒ CHI</Text>
                                           <ScrollView><DoughnutChart2 ngay={ngay} months={"1"} ></DoughnutChart2></ScrollView>
                   
-                </View>
+                </ScrollView>
                 
               )}
               {show&& (
-                <View style={{height:400,width:"100%",alignItems:'center'}}>
-                                                            <Text style={{fontSize:18, fontWeight:'bold', marginLeft:10}}>BIỂU ĐỒ THU</Text>
+                <ScrollView style={{height:400,width:"100%"}}>
+                                                            <Text style={{fontSize:18, fontWeight:'bold', marginLeft:140}}>BIỂU ĐỒ THU</Text>
 
                     <ScrollView><DoughnutChart  ngay={ngay} months={"1"}></DoughnutChart>  </ScrollView>  
-                </View>
+                </ScrollView>
               )}
             </View>
            )}
@@ -165,12 +163,12 @@ console.log(chenhLech)
               <View style={{flexDirection:'row',justifyContent:'flex-start',height:30}}>
                     <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',backgroundColor:"E6E6E6",width:'48%'}}>
                         <Text style={styles.Text}>Chi tiêu</Text>
-                        <TongChi></TongChi>
+                        {totalChi}
                         <Text>đ</Text>
                     </View>
                     <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',backgroundColor:"E6E6E6",width:'48%'}}>
                         <Text style={styles.Text}>Thu nhập</Text>
-                        <TongThu></TongThu>
+                       {totalThu}
                         <Text>đ</Text>
                     </View>
               </View>
@@ -190,18 +188,18 @@ console.log(chenhLech)
                 </TouchableOpacity>
              </View>
              {!show2&& (
-                <View style={{height:250,width:"100%", alignItems:'center'}}>
-                                          <Text style={{fontSize:18, fontWeight:'bold', marginLeft:10}}>BIỂU ĐỒ CHI</Text>
+                <ScrollView style={{height:400,width:"100%"}}>
+                                          <Text style={{fontSize:18, fontWeight:'bold', marginLeft:140}}>BIỂU ĐỒ CHI</Text>
                   <DoughnutChart2 ngay={ngay} months={"12"}></DoughnutChart2>
-                </View>
+                </ScrollView>
                 
               )}
               {show2&& (
-                <View style={{height:250,width:"100%",alignItems:'center'}}>
-                                                            <Text style={{fontSize:18, fontWeight:'bold', marginLeft:10}}>BIỂU ĐỒ THU</Text>
+                <ScrollView style={{height:400,width:"100%"}}>
+                                                            <Text style={{fontSize:18, fontWeight:'bold', marginLeft:140}}>BIỂU ĐỒ THU</Text>
 
                      <DoughnutChart ngay={ngay} months={"12"}></DoughnutChart>   
-                </View>
+                </ScrollView>
               )}
             </View>
            )}

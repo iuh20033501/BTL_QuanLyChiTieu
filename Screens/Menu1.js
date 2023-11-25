@@ -15,7 +15,45 @@ export default function Menu1({navigation}) {
 
   };
   const [data, setData] = useState([]);
+  const [item, setItem] = useState();
+  const submitItem = () => {
+    if (note && tien > 0 && name && img && name) {
+      var i = {};
+      i.notice = note;
+      i.date = `${value.getDate()}/${value.getMonth() + 1}/${value.getFullYear()}`;
+      i.money = tien;
+      i.name = name;
+      i.image = img;
+      i.view = 'true';
+      i.status = show;
+      setItem(i);
+      
+      // Gửi dữ liệu lên server
+      fetch('https://6551ee245c69a779032948e9.mockapi.io/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(i),
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Success:', data);
+          alert('thêm thành công')
+          // Thực hiện các thao tác cần thiết sau khi gửi thành công
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          // Xử lý lỗi khi gửi dữ liệu không thành công
+        });
+    } else {
+      alert('Lỗi nhập liệu');
+    }
 
+  };
+  
+
+  
   useEffect(() => {
     fetch('https://6551ee245c69a779032948e9.mockapi.io/data')
         .then((response) => response.json())
@@ -32,6 +70,9 @@ export default function Menu1({navigation}) {
    const [chi,Setchi] = useState(0)
    const [thu,Setthu] = useState(0)
    const[note,SetNote]=useState()
+   const[name,SetName]=useState()
+   const[img,SetImg]=useState()
+
    const [chitieu, setChitieu] = useState([
     {
       id: 1,
@@ -40,7 +81,7 @@ export default function Menu1({navigation}) {
     },
     {
       id: 2,
-      name: 'chi tiêu ',
+      name: 'chi tiêu',
       image: require('../assets/muasam.png'),
     },
     {
@@ -53,7 +94,7 @@ export default function Menu1({navigation}) {
       name: 'mỹ phẩm',
       image: require('../assets/mypham.png'),
     },
-    { 
+    {
       id: 5,
       name: 'liên lạc',
       image: require('../assets/lienlac.png'),
@@ -78,8 +119,8 @@ export default function Menu1({navigation}) {
       name: 'chi phí khác',
       image: require('../assets/khac.png'),
     },
-    
-  ])
+  ]);
+  
   const [thuNhap, setThuNhap] = useState([
     {
       id: 1,
@@ -134,11 +175,11 @@ export default function Menu1({navigation}) {
        
           {!show&&(
             <View style={{flexDirection:'column'}} >
-              <View style={{flexDirection:'row', height: click ? 320 : 20 ,justifyContent:'flex-start'}}>
+              <View style={{flexDirection:'row', height: click ? 320 : 40 ,justifyContent:'flex-start'}}>
            
               <Text style={styles.Text}>{`${value.getDate()}/${value.getMonth() + 1}/${value.getFullYear()}`}</Text>
-              <TouchableOpacity onPress={clickMouse}>
-              <Text style={styles.Text}>{click ? 'OK' : 'DATE'}</Text>
+              <TouchableOpacity onPress={clickMouse} style={styles.Buttun2}>
+              <Text style={styles.Text2}>{click ? 'OK' : 'DATE'}</Text>
                 </TouchableOpacity>
                 </View>
                 {click&&( <DateTimePicker
@@ -159,7 +200,7 @@ export default function Menu1({navigation}) {
                  <Text style={styles.Text}>Danh mục </Text>
                  <View style={styles.List}> 
                   {chitieu.map((item, index) => (
-                      <TouchableOpacity style={{backgroundColor:'white',height:"33%",width:'33%',justifyContent:'center',alignItems:'center'}} key={index}  onMouseEnter={() => setHoveredItemId(item.id)} onPress={()=>Setchi(item.id)} onMouseLeave={() => setHoveredItemId(chi)}>
+                      <TouchableOpacity style={{backgroundColor:'white',height:"33%",width:'33%',justifyContent:'center',alignItems:'center'}} key={index}  onMouseEnter={() => setHoveredItemId(item.id)} onPress={()=>{Setchi(item.id);SetName(item.name);SetImg(item.image)}} onMouseLeave={() => setHoveredItemId(chi)}>
                         <View style={{backgroundColor: hoveredItemId === item.id ? '#FFA500':'white',justifyContent:'center',flexDirection:'column',alignItems:'center',height:'100%',width:'100%'}} >
                             <Image source={item.image} style={styles.Img}></Image>
                             <Text style={{color: hoveredItemId === item.id ? 'white':'gray'}}>{item.name}</Text>
@@ -168,7 +209,7 @@ export default function Menu1({navigation}) {
                     ))}
                  </View>
                  <View style={{justifyContent:"center",alignItems:"center"}}>
-                  <TouchableOpacity style={{borderRadius:25,backgroundColor:'#FFA500',width:'80%',height:50,justifyContent:"center",alignItems:"center"}}>
+                  <TouchableOpacity style={{borderRadius:25,backgroundColor:'#FFA500',width:'80%',height:50,justifyContent:"center",alignItems:"center"}} onPress={()=>{submitItem()}}>
                     <Text style={{color:'white'}}> NHẬP KHOẢN CHI</Text> </TouchableOpacity>
                  </View>
 
@@ -177,11 +218,11 @@ export default function Menu1({navigation}) {
            )}
            {show&&(
             <View>
-               <View style={{flexDirection:'row', height: click ? 320 : 20 ,justifyContent:'flex-start'}}>
+               <View style={{flexDirection:'row', height: click ? 320 : 40 ,justifyContent:'flex-start'}}>
            
            <Text style={styles.Text}>{`${value.getDate()}/${value.getMonth() + 1}/${value.getFullYear()}`}</Text>
-           <TouchableOpacity onPress={clickMouse}>
-           <Text style={styles.Text}>{click ? 'OK' : 'DATE'}</Text>
+           <TouchableOpacity onPress={clickMouse} style={styles.Buttun2}>
+           <Text style={styles.Text2}>{click ? 'OK' : 'DATE'}</Text>
              </TouchableOpacity>
              </View>
              {click&&( <DateTimePicker
@@ -202,7 +243,7 @@ export default function Menu1({navigation}) {
                  <Text style={styles.Text}>Danh mục </Text>
                  <View style={styles.List}> 
                  {thuNhap.map((item, index) => (
-                      <TouchableOpacity style={{backgroundColor: hoveredItemId === item.id ? '#FFA500':'white',height:"33%",width:'33%',justifyContent:'center',alignItems:'center'}} key={index}  onMouseEnter={() => setHoveredItemId(item.id)} onPress={()=>Setthu(item.id)}  onMouseLeave={() => setHoveredItemId(thu)}>
+                      <TouchableOpacity style={{backgroundColor: hoveredItemId === item.id ? '#FFA500':'white',height:"33%",width:'33%',justifyContent:'center',alignItems:'center'}} key={index}  onMouseEnter={() => setHoveredItemId(item.id)} onPress={()=>{Setthu(item.id);SetName(item.name);SetImg(item.image)}}  onMouseLeave={() => setHoveredItemId(thu)}>
                         <View style={{justifyContent:'center',flexDirection:'column',alignItems:'center',height:'100%',width:'100%'}} >
                             <Image source={item.image} style={styles.Img}></Image>
                             <Text style={{color: hoveredItemId === item.id ? 'white':'gray'}}>{item.name}</Text>
@@ -212,7 +253,7 @@ export default function Menu1({navigation}) {
 
                  </View>
                  <View style={{justifyContent:"center",alignItems:"center"}}>
-                  <TouchableOpacity style={{borderRadius:25,backgroundColor:'#FFA500',width:'80%',height:50,justifyContent:"center",alignItems:"center"}}>
+                  <TouchableOpacity style={{borderRadius:25,backgroundColor:'#FFA500',width:'80%',height:50,justifyContent:"center",alignItems:"center"}} onPress={()=>{submitItem()}}>
                     <Text style={{color:'white'}}> NHẬP KHOẢN THU</Text> </TouchableOpacity>
                  </View>
                  
@@ -273,12 +314,25 @@ const styles = StyleSheet.create({
         fontWeight:'bold',
         marginLeft:10,
   },
+  Text2:{
+    fontSize:16,
+    fontWeight:'bold',
+
+},
   Input:{
     backgroundColor:'#E6E6E6',
     height:'80%',
     borderRadius:8, 
     width:250,
     marginRight:20
+  },
+  Buttun2:{
+    width:'100',
+    backgroundColor:'#FFA500',
+    borderRadius:8,
+    justifyContent:'center',
+    alignItems:'center',
+    marginLeft:150
   },
   List:{
     backgroundColor:'#E6E6E6',

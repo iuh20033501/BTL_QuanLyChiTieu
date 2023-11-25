@@ -33,8 +33,8 @@ const DoughnutChart =  ({ ngay, months }) => {
        });
        setData(dataChi);
      });
- }, [ngay]);
-
+ }, [ngay,months]);
+console.log(data)
  
  // Hàm kiểm tra xem date có nằm trong khoảng thời gian startDate đến endDate không
  const isDateWithinRange = (date, startDate, endDate) => {
@@ -96,7 +96,6 @@ const DoughnutChart =  ({ ngay, months }) => {
    
   }, [data]);
 
-  // console.log(data);
 
   const getRandomColor = () => {
     const letters = '0123456789ABCDEF';
@@ -148,7 +147,7 @@ const DoughnutChart =  ({ ngay, months }) => {
       <Doughnut data={chartData} options={options} />
       <p>Danh sách thu:</p>
       <ul>
-        {data.map((item, index) => (
+        {data2.map((item, index) => (
           <li key={item.id} style={{ color: backgroundColors[index] }}>
                       <FontAwesomeIcon icon={faSquare} style={{width:50}} />
                       {item.name}: {item.money}

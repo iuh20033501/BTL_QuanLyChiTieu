@@ -4,15 +4,29 @@ import { Chart,ArcElement } from "chart.js";
 import { faSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 Chart.register(ArcElement);
+var dl =[]
 
- // Tính tổng chi
+  export const CalculateTotalChi = () => {
+
+  
+    return dl.reduce((total1, item) => {
+      if (!item.status) {
+        // Chi tiêu (status: false)
+        return total1 + item.money;
+      }
+      return total1;
+    }, 0);
+  
+
+  };
 
 
 const DoughnutChart2 =  ({ ngay, months }) => {
-  const [data, setData] = useState([]);
+ 
   const [data2, setData2] = useState([]);
-  //  console.log(ngay)
-  //  console.log(months)
+  const [data, setData] = useState([]);
+   console.log(ngay)
+   console.log(months)
    useEffect(() => {
     fetch('https://6551ee245c69a779032948e9.mockapi.io/data')
       .then((response) => response.json())
@@ -36,6 +50,8 @@ const DoughnutChart2 =  ({ ngay, months }) => {
         setData(dataChi);
       });
   }, [ngay,months]);
+  
+  
   
   // Hàm kiểm tra xem date có nằm trong khoảng thời gian startDate đến endDate không
   const isDateWithinRange = (date, startDate, endDate) => {
@@ -103,7 +119,7 @@ const DoughnutChart2 =  ({ ngay, months }) => {
 
  
 
-  // console.log(data);
+   console.log(data);
 
   const getRandomColor = () => {
     const letters = '0123456789ABCDEF';
@@ -117,7 +133,7 @@ const DoughnutChart2 =  ({ ngay, months }) => {
   // Chuyển đổi dữ liệu từ mảng đối tượng thành các mảng thích hợp cho biểu đồ
   const names = data2.map((item) => item.name);
   const amounts = data2.map((item) => item.money);
- 
+
   // Tạo mảng màu ngẫu nhiên
   const backgroundColors = Array.from({length: data2.length}, () => getRandomColor());
 
@@ -156,6 +172,7 @@ const DoughnutChart2 =  ({ ngay, months }) => {
       <p>Danh sách chi tiêu:</p>
       <ul>
         {data2.map((item, index) => (
+          
           <li key={item.id} style={{ color: backgroundColors[index] }}>
              <FontAwesomeIcon icon={faSquare} style={{width:50}} />
             {item.name}: {item.money}
