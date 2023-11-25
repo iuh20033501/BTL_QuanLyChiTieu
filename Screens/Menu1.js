@@ -24,7 +24,7 @@ export default function Menu1({navigation}) {
       i.money = tien;
       i.name = name;
       i.image = img;
-      i.view = 'true';
+      i.view = true;
       i.status = show;
       setItem(i);
       
