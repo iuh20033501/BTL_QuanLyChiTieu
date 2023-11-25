@@ -11,6 +11,7 @@ import ChenhLechChiTieu from './ChenhLechChiTieu';
 import DateTimePicker from 'react-datetime-picker';
 import TongThu from './TongThu';
 
+
 export default function ThongKe({navigation}) {
     const[show,setShow]= useState(false)
     const[show2,setShow2]= useState(false)
