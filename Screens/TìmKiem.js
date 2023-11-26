@@ -2,6 +2,7 @@
 import { StatusBar } from 'expo-status-bar';
   import { useState, useEffect } from 'react';
   import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Modal,Button} from 'react-native';
+import Sua from './SuaChiTieu';
 
   export default function TimKiem({navigation}) {
     const[nhap,setNhap]= useState(null);
@@ -108,13 +109,12 @@ import { StatusBar } from 'expo-status-bar';
         throw new Error('Lỗi khi fetch dữ liệu');
       }
       const json = await response.json();
-      // Lọc chỉ những mục có thuộc tính view là true và chưa bị xóa
+     
       const filteredData = json.filter((item) => item.view === true && !deletedData.includes(item.id));
       setData(filteredData);
     } catch (error) {
       console.error('Lỗi khi fetch dữ liệu:', error.message);
     } finally {
-      // Đặt fetchingData thành false khi quá trình fetch kết thúc
       setFetchingData(false);
     }
   };
@@ -125,13 +125,10 @@ import { StatusBar } from 'expo-status-bar';
 }, [fetchingData, deletedData]);
 
 const handleEditItem = (item) => {
-  // Dựa vào thuộc tính view của item để xác định chuyển hướng đến trang sửa Thu hoặc trang sửa Chi
-  if (item.view) {
-    // Chuyển hướng đến trang sửa Thu với dữ liệu của item
-    navigation.navigate('Sua2', { item });
+  if (item.status === false) {
+    navigation.navigate('Sua', {item});
   } else {
-    // Chuyển hướng đến trang sửa Chi với dữ liệu của item
-    navigation.navigate('Sua', { item });
+    navigation.navigate('Sua2', {item});
   }
 };
 
@@ -151,7 +148,7 @@ const handleEditItem = (item) => {
               width: '15%', height: '90%', borderRadius: 8, marginLeft: 5, alignItems: 'center', justifyContent: 'center', backgroundColor: '#FFA500'
             }}
             onPress={() => {
-              handleSearch(); // Gọi hàm tìm kiếm khi ấn nút tìm kiếm
+              handleSearch(); 
             }}
           >
             <Image source={require('../assets/timkiem.png')} style={{ resizeMode: 'contain', height: '80%', width: '80%' }} />

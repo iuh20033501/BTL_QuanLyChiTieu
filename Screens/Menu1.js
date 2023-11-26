@@ -165,6 +165,7 @@ export default function Menu1({navigation}) {
             <View style={{borderRadius:8,backgroundColor:'#808080',width:'50%',height:30,flexDirection:'row'}}>
              <TouchableOpacity style={{ width:'50%',backgroundColor:show?"#808080":'#FFA500', borderRadius:8,justifyContent:'center',alignItems:'center'}} onPress={()=>Setshow(false)}>
                  <Text style={{color:show?'#FFA500':'white',fontWeight:'bold'}}>Tiền chi</Text>
+                 
              </TouchableOpacity>
              <TouchableOpacity style={{ width:'50%',backgroundColor:show?'#FFA500':"#808080", borderRadius:8,justifyContent:'center',alignItems:'center'}} onPress={()=>Setshow(true)}>
              <Text style={{color:show?'white':'#FFA500',fontWeight:'bold'}}>Tiền thu</Text>

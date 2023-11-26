@@ -36,8 +36,8 @@
           <stack.Screen name= 'Menu' component={Menu1}  options={{ headerShown: false }}></stack.Screen>
           <stack.Screen name= 'Thongke' component={ThongKe}  options={{ headerShown: false }}></stack.Screen>
           <stack.Screen name= 'Timkiem' component={TimKiem}  options={{ headerShown: false }}></stack.Screen>
-          <stack.Screen name= 'SuaThuNhap' component={Sua2}  options={{ headerShown: false }}></stack.Screen>
-          <stack.Screen name= 'SuaChiTieu' component={Sua}  options={{ headerShown: false }}></stack.Screen>
+          <stack.Screen name= 'Sua2' component={Sua2}  options={{ headerShown: false }}></stack.Screen>
+          <stack.Screen name= 'Sua' component={Sua}  options={{ headerShown: false }}></stack.Screen>
           <stack.Screen name= 'Khac' component={Khac}  options={{ headerShown: false }}></stack.Screen>
         </stack.Navigator>
       </NavigationContainer>
