@@ -3,10 +3,11 @@ import { useState } from 'react';
 import { StyleSheet, Text, View,TouchableOpacity,TextInput,Image } from 'react-native';
 
 
-export default function Sua2({navigation}) {
+export default function Sua2({navigation,route}) {
   const [tien,Settien] = useState(0)
   const [thu,Setthu] = useState(0)
    const[note,SetNote]=useState()
+   const { item } = route.params;
   const [thuNhap, setThuNhap] = useState([
     {
       id: 1,

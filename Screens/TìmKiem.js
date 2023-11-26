@@ -1,14 +1,18 @@
   import { faL } from '@fortawesome/free-solid-svg-icons';
 import { StatusBar } from 'expo-status-bar';
   import { useState, useEffect } from 'react';
-  import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+  import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Modal,Button} from 'react-native';
 
   export default function TimKiem({navigation}) {
     const[nhap,setNhap]= useState(null);
-    //const[chi,setChi]= useState(null);
     const[data,setData] = useState([]);
     const [searchResults, setSearchResults] = useState([]);
     const[click,setClick] = useState(false);
+    const [deletedData, setDeletedData] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const [fetchingData, setFetchingData] = useState(false);
+
 
     useEffect(() => {
       fetch('https://6551ee245c69a779032948e9.mockapi.io/data')
@@ -68,36 +72,68 @@ import { StatusBar } from 'expo-status-bar';
         }
       };
 
-      const handleDeleteItem = async (itemId) => {
+      const handleDeleteItem = async (id) => {
         try {
-          const response = await fetch(`https://6551ee245c69a779032948e9.mockapi.io/data/${itemId}`, {
+          const response = await fetch(`https://6551ee245c69a779032948e9.mockapi.io/data/${id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ view: false }),
+            body: JSON.stringify({view: false }), // Gửi status: false để đánh dấu là đã xóa
           });
-      
+    
           if (!response.ok) {
             throw new Error('Không thể cập nhật trạng thái xóa');
           }
-      
-          // Không cần phải cập nhật state ở đây
+    
+          // Cập nhật state để kích hoạt render lại component
+          setFetchingData(true);
+          setModalVisible(true);
         } catch (error) {
           console.error('Lỗi khi xóa mục:', error.message);
         }
       };
       
-      // Sử dụng useEffect để theo dõi sự thay đổi trong data và gọi handleDeleteItem khi có thay đổi
-      useEffect(() => {
-        // Lặp qua mỗi phần tử trong data để kiểm tra xem có status mới cần cập nhật không
-        data.forEach(async (item) => {
-          if (item.view === false) {
-            await handleDeleteItem(item.id);
-          }
-        });
-      }, [data]); // Theo dõi sự thay đổi trong data
 
+      const closeModal = () => {
+        setModalVisible(false);
+      };
+  
+
+  useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await fetch('https://6551ee245c69a779032948e9.mockapi.io/data');
+      if (!response.ok) {
+        throw new Error('Lỗi khi fetch dữ liệu');
+      }
+      const json = await response.json();
+      // Lọc chỉ những mục có thuộc tính view là true và chưa bị xóa
+      const filteredData = json.filter((item) => item.view === true && !deletedData.includes(item.id));
+      setData(filteredData);
+    } catch (error) {
+      console.error('Lỗi khi fetch dữ liệu:', error.message);
+    } finally {
+      // Đặt fetchingData thành false khi quá trình fetch kết thúc
+      setFetchingData(false);
+    }
+  };
+
+  if (fetchingData) {
+    fetchData();
+  }
+}, [fetchingData, deletedData]);
+
+const handleEditItem = (item) => {
+  // Dựa vào thuộc tính view của item để xác định chuyển hướng đến trang sửa Thu hoặc trang sửa Chi
+  if (item.view) {
+    // Chuyển hướng đến trang sửa Thu với dữ liệu của item
+    navigation.navigate('Sua2', { item });
+  } else {
+    // Chuyển hướng đến trang sửa Chi với dữ liệu của item
+    navigation.navigate('Sua', { item });
+  }
+};
 
     return (
       <View style={styles.container}>
@@ -137,25 +173,29 @@ import { StatusBar } from 'expo-status-bar';
                   </View>
           </View>
           <View style ={{bottom:0, position:'relative'}}>
-          <ScrollView>
+          <ScrollView style={{width:'100%',height:380}}>
             {searchResults.map((item, index) => {
               return (
                 <View key={index}>
                   <View style={styles.Textbox}>
                     <Text key={index}>Tên: {item.name}</Text>
                     <Text key={index}>Ghi chú: {item.notice}</Text>
-                    <Text style={{ position: 'absolute', alignSelf: 'flex-end' }}>Giá: {item.money}đ</Text>
-                    <Text style={{ position: 'absolute', alignSelf: 'flex-end', marginTop: 20 }}>Loại: {getStatusText(item.status)}</Text>
-                    <TouchableOpacity onPress={() => handleDeleteItem(index)}>
-            <Text style={{ color: 'red' }}>Xóa</Text>
-          </TouchableOpacity>
+                    <Text key={index} style={{ position: 'absolute', alignSelf: 'flex-end' }}>Giá: {item.money}đ</Text>
+                    <Text  key={index} style={{ position: 'absolute', alignSelf: 'flex-end', marginTop: 20 }}>Loại: {getStatusText(item.status)}</Text>
+                    <TouchableOpacity style={{ width:'10%' ,borderWidth:1, backgroundColor:'white'}} onPress={() => handleDeleteItem(item.id)}>
+                    <Text  style={{ color: 'red', alignSelf:'center' }}>Xóa</Text> 
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={{ width:'10%' ,borderWidth:1, backgroundColor:'white', position: 'absolute', alignSelf: 'flex-end', marginTop:40}} onPress={() => handleEditItem(item)}>
+                    <Text Text  style={{ color: 'green', alignSelf:'center'}}>Sửa</Text> 
+                    </TouchableOpacity>
                   </View>
                 </View>
               );
             })}
           </ScrollView> 
         </View>
-          <View style={{width:'100%',height:50,justifyContent:'flex-start',alignItems:'flex-end',flexDirection:'row',bottom:0, position:'relative'}}>
+          <View style={{width:'100%',height:50,justifyContent:'flex-start',alignItems:'flex-end',flexDirection:'row',bottom:0, position:'absolute'}}>
               <TouchableOpacity style={{backgroundColor: 'white',height:"100%",width:'25%',justifyContent:'center',flexDirection:'column',alignItems:'center',borderRadius:5}}   onPress={()=>navigation.navigate('Menu')}>
           
                                 <Image source={require('../assets/home.png')} style={styles.Img}></Image>
@@ -181,6 +221,21 @@ import { StatusBar } from 'expo-status-bar';
                             
               </TouchableOpacity>
             </View>
+             {/* Modal thông báo */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Xóa thành công!</Text>
+            <Button title="Đóng" onPress={() => {closeModal(),handleSearch()}} />
+          </View>
+        </View>
+      </Modal>
       </View>
     );
   }
@@ -213,4 +268,31 @@ import { StatusBar } from 'expo-status-bar';
       marginBottom: 5,
       backgroundColor:'#F3d8f3'
     },
+    centeredView: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 22
+    },
+    modalView: {
+      margin: 20,
+      backgroundColor: 'white',
+      borderRadius: 20,
+      padding: 35,
+      alignItems: 'center',
+      shadowColor: '#000',
+      shadowOffset: {
+      width: 0,
+      height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5
+    },
+    modalText: {
+      marginBottom: 15,
+      textAlign: 'center',
+      fontSize: 18,
+      fontWeight: 'bold'
+    }
   });
