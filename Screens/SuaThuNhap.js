@@ -52,7 +52,7 @@ export default function Sua2({navigation, route}) {
            alert('Lỗi khi sửa');
          });
      } else {
-       alert('Lỗi nhập liệu');
+      setModalVisible1(true);
      }
    };
    
@@ -67,7 +67,10 @@ export default function Sua2({navigation, route}) {
    const closeModal = () => {
      setModalVisible(false);
    };
-
+   const [modalVisible1, setModalVisible1] = useState(false);
+   const closeModal1 = () => {
+       setModalVisible1(false);
+     };
 
   const [thuNhap, setThuNhap] = useState([
     {
@@ -132,7 +135,7 @@ export default function Sua2({navigation, route}) {
                 </View>
                 <View style={{ height:40,flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
                   <Text style={styles.Text}>Tiền Thu</Text>
-                  <TextInput style={{height:30,width:226, backgroundColor:'#F2F3D6', borderWidth:1,borderRadius:10,marginLeft:6,paddingLeft:10}} value={tien}  onChangeText={(text)=>{ const numericValue = parseFloat(text); ;Settien(isNaN(numericValue) ? 0 : numericValue)}}></TextInput>
+                  <TextInput style={{height:30,width:226, backgroundColor:'#F2F3D6', borderWidth:1,borderRadius:10,marginLeft:6,paddingLeft:10}} value={tien}  onChangeText={(text)=>{ const numericValue = parseFloat(text); ;setTien(isNaN(numericValue) ? 0 : numericValue)}}></TextInput>
                   <Text style={{fontSize:16, marginLeft:5}}>₫</Text>
                  </View> 
               <Text style={styles.Text}>Danh mục </Text>
@@ -189,7 +192,21 @@ export default function Sua2({navigation, route}) {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>Sửa thành công</Text>
-            <Button title="Đóng" onPress={() => {closeModal();navigation.navigate('Timkiem')}} />
+            <Button title="Đóng" onPress={() => {closeModal();navigation.navigate('Menu')}} />
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible1}
+        onRequestClose={() => {
+          setModalVisible1(!modalVisible1);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Lỗi nhập liệu</Text>
+            <Button title="Đóng" onPress={() => closeModal1()} />
           </View>
         </View>
       </Modal>

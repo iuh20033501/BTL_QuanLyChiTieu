@@ -190,13 +190,14 @@ const handleEditItem = (item) => {
                   <View style={styles.Textbox}>
                     <Text key={index}>Tên: {item.name}</Text>
                     <Text key={index}>Ghi chú: {item.notice}</Text>
-                    <Text key={index} style={{ position: 'absolute', alignSelf: 'flex-end' }}>Giá: {item.money}đ</Text>
+                    <Text key={index}>Ngày: {item.date}</Text>
+                    <Text key={index} style={{ position: 'absolute', alignSelf: 'flex-end'}}>Giá: {item.money}đ</Text>
                     <Text  key={index} style={{ position: 'absolute', alignSelf: 'flex-end', marginTop: 20 }}>Loại: {getStatusText(item.status)}</Text>
-                    <TouchableOpacity style={{ width:'10%' ,borderWidth:1, backgroundColor:'white',borderRadius:5, borderWidth:1,marginTop:5 }} onPress={() => handleDeleteItem(item.id)}>
+                    <TouchableOpacity style={{ width:'10%' ,borderWidth:1, backgroundColor:'white',borderRadius:5, borderWidth:1,marginTop:40,marginLeft:280,position: 'absolute', }} onPress={() => handleDeleteItem(item.id)}>
                     <Text  style={{ color: 'red', alignSelf:'center'}}>Xóa</Text> 
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{ width:'10%' ,borderWidth:1, backgroundColor:'white', position: 'absolute', alignSelf: 'flex-end', marginTop:45,borderRadius:5, borderWidth:1}} onPress={() => handleEditItem(item)}>
+                    <TouchableOpacity style={{ width:'10%' ,borderWidth:1, backgroundColor:'white', position: 'absolute', alignSelf: 'flex-end', marginTop:40,borderRadius:5, borderWidth:1}} onPress={() => handleEditItem(item)}>
                     <Text Text  style={{ color: 'green', alignSelf:'center'}}>Sửa</Text> 
                     </TouchableOpacity>
                   </View>
