@@ -23,7 +23,7 @@ const DoughnutChart =  ({ ngay, months }) => {
            parseInt(itemDateParts[0])
          );
  
-         // Lọc dữ liệu với điều kiện status === false, view === true và item.date nằm trong khoảng thời gian ngay đến ngay + 1 tháng
+        
          return item.status && item.view && isDateWithinRange(itemDate, addMonths(ngayDate, months), ngayDate);
        });
        setData(dataChi);
@@ -31,58 +31,48 @@ const DoughnutChart =  ({ ngay, months }) => {
  }, [ngay,months]);
 console.log(data)
  
- // Hàm kiểm tra xem date có nằm trong khoảng thời gian startDate đến endDate không
+
  const isDateWithinRange = (date, startDate, endDate) => {
    return date >= startDate && date < endDate;
  };
  
- // Hàm thêm tháng cho một ngày cụ thể
-  // Hàm thêm tháng cho một ngày cụ thể
+
   const addMonths = (date, months) => {
     const result = new Date(date);
   
-    // Lấy ra thông tin về ngày, tháng và năm
+  
     const currentMonth = result.getMonth()+1;
     const currentYear = result.getFullYear();
     const currentDay = result.getDate();
     
   
-    // Tính toán tháng mới
     const newMonth = ((currentMonth - months + 11) % 12 + 12) % 12;
     const monthsToAdd = Math.floor((months-currentMonth  + 12) / 12);
-    
-    // console.log(monthsToAdd);
-    // console.log(newMonth);
-    // console.log(currentMonth);
-    // console.log(monthsToAdd);
-
-  
-    // Tính toán năm mới
+   
     const newYear = currentYear - monthsToAdd;
   
-    // Thiết lập tháng và năm mới
+   
     result.setMonth(newMonth);
     result.setFullYear(newYear);
     
-    // Tránh tình huống khi tháng mới có số ngày ít hơn tháng cũ (đến ngày 31 tháng 1 chẳng hạn)
+   
     const newMonthDays = new Date(newYear, newMonth+1, 0).getDate();
     result.setDate(Math.min(currentDay, newMonthDays));
   
     return result;
   };
   useEffect(() => {
-    // Hàm kiểm tra và cập nhật dữ liệu
- 
+  
       const updatedData2 = [...data2];
 
       data.forEach((item1) => {
         const matchingItemIndex = updatedData2.findIndex((item2) => item1.name === item2.name);
 
         if (matchingItemIndex !== -1) {
-          // Nếu tìm thấy mục trùng, cộng dồn money vào mục tương ứng trong data2
+         
           updatedData2[matchingItemIndex].money += item1.money;
         } else {
-          // Nếu không tìm thấy mục trùng, thêm mục đó vào data2
+         
           updatedData2.push({ ...item1 });
         }
       });
@@ -101,15 +91,15 @@ console.log(data)
     return color;
   };
 
-  // Chuyển đổi dữ liệu từ mảng đối tượng thành các mảng thích hợp cho biểu đồ
+ 
   const names = data2.map((item) => item.name);
   const amounts = data2.map((item) => item.money);
 
   const testname = data2.forEach((item) => item.name);
-  // Tạo mảng màu ngẫu nhiên
+  
   const backgroundColors = Array.from({length: data2.length}, () => getRandomColor());
 
-  // console.log(names)
+  
   const chartData = {
     labels:  data2.map((item) => item.name),
     datasets: [

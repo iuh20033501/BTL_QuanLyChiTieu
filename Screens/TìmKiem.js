@@ -8,7 +8,7 @@ import Sua from './SuaChiTieu';
     const[nhap,setNhap]= useState(null);
     const[data,setData] = useState([]);
     const [searchResults, setSearchResults] = useState([]);
-   // const[click,setClick] = useState(false);
+  
     const [deletedData, setDeletedData] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [fetchingData, setFetchingData] = useState(false);
@@ -19,7 +19,7 @@ import Sua from './SuaChiTieu';
       fetch('https://6551ee245c69a779032948e9.mockapi.io/data')
         .then((response) => response.json())
         .then((json) => {
-          // Lọc chỉ những mục có thuộc tính view là true
+          
           const filteredData = json.filter((item) => item.view === true);
           setData(filteredData);
           setData2(filteredData);
@@ -35,22 +35,22 @@ import Sua from './SuaChiTieu';
     
 
 
-      // Tính tổng chi
+      
       const calculateTotalChi = () => {
         return data.reduce((total1, item) => {
           if (!item.status) {
-            // Chi tiêu (status: false)
+           
             return total1 + item.money;
           }
           return total1;
         }, 0);
       };
     
-      // Tính tổng thu
+     
       const calculateTotalThu = () => {
         return data.reduce((total, item) => {
           if (item.status) {
-            // Thu nhập (status: true)
+           
             return total + item.money;
           }
           return total;
@@ -59,7 +59,7 @@ import Sua from './SuaChiTieu';
     
       const totalThu = calculateTotalThu();
       const totalChi = calculateTotalChi();
-      // Tính chênh lệch
+      
       const chenhLech = totalThu - totalChi;
       let formattedChenhLech;
 
@@ -68,15 +68,15 @@ import Sua from './SuaChiTieu';
       } else if (chenhLech < 0) {
         formattedChenhLech = `${chenhLech}`;
       } else {
-        formattedChenhLech = '0'; // Trường hợp chenhLech bằng 0
+        formattedChenhLech = '0'; 
       }
 
       const handleSearch = () => {
       
         if (!nhap) {
-          setData2(data); // Nếu ô tìm kiếm trống, hiển thị toàn bộ dữ liệu
+          setData2(data); 
         } else {
-          // Sử dụng filter để tìm kiếm gần đúng theo tên
+         
           const results = data.filter((item) =>
             item.name.toLowerCase().includes(nhap.toLowerCase()) ||
             item.notice.toLowerCase().includes(nhap.toLowerCase())
@@ -93,14 +93,14 @@ import Sua from './SuaChiTieu';
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({view: false }), // Gửi status: false để đánh dấu là đã xóa
+            body: JSON.stringify({view: false }), 
           });
     
           if (!response.ok) {
             throw new Error('Không thể cập nhật trạng thái xóa');
           }
     
-          // Cập nhật state để kích hoạt render lại component
+          
           setFetchingData(true);
           setModalVisible(true);
         } catch (error) {

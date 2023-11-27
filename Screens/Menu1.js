@@ -9,7 +9,6 @@ export default function Menu1({navigation}) {
   const [value,setValue] = useState(new Date())
   const [click,setClick] = useState(false)
   const clickMouse = () => {
-    // Khi TouchableOpacity được nhấp, chuyển giá trị click sang true
    if(click===false) setClick(true);
    else  setClick(false)
 
@@ -28,7 +27,7 @@ export default function Menu1({navigation}) {
       i.status = show;
       setItem(i);
       
-      // Gửi dữ liệu lên server
+    
       fetch('https://6551ee245c69a779032948e9.mockapi.io/data', {
         method: 'POST',
         headers: {
@@ -43,7 +42,7 @@ export default function Menu1({navigation}) {
         })
         .catch(error => {
           console.error('Error:', error);
-          // Xử lý lỗi khi gửi dữ liệu không thành công
+         
         });
     } else {
       setModalVisible1(true)

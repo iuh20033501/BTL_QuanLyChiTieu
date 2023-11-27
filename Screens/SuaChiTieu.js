@@ -33,7 +33,6 @@ export default function Sua({navigation, route}) {
         status: false,
       };
   
-      // Cập nhật dữ liệu trên máy chủ bằng phương thức PUT
       fetch(`https://6551ee245c69a779032948e9.mockapi.io/data/${item.id}`, {
         method: 'PUT',
         headers: {
@@ -65,7 +64,7 @@ export default function Sua({navigation, route}) {
   const [tien, setTien] = useState(data.money);
   const [name, setName] = useState(data.name);
   const [img, setImg] = useState(data.image);
-  const [chi, setChi] = useState(0);  // Bạn có thể cần sử dụng state để lưu trữ giá trị của chi
+  const [chi, setChi] = useState(0);  
 
 
   const [modalVisible, setModalVisible] = useState(false);

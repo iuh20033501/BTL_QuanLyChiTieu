@@ -12,13 +12,11 @@ export default function ThongKe({navigation}) {
     const[show2,setShow2]= useState(false)
     const[thang,setThang]= useState(true)
     const [data, setData] = useState([]);
-     //const [datathu, setDataThu] = useState([]);
-    // const [datachi, setDataChi] = useState([]);
     const [click,setClick] = useState(false)
     const [value,setValue] = useState(new Date())
      const[ngay,setNgay]=useState();
     const clickMouse = () => {
-      // Khi TouchableOpacity được nhấp, chuyển giá trị click sang true
+      
      if(click===false) setClick(true);
      else  setClick(false)
   
@@ -29,10 +27,10 @@ export default function ThongKe({navigation}) {
          .then((response) => response.json())
          .then((json) => {
            const dataChi = json.filter((item) => {
-             // Chuyển đổi giá trị ngay thành đối tượng Date
+            
              const ngayDate = ngay;
      
-             // Chuyển đổi giá trị item.date thành đối tượng Date
+            
              const itemDateParts = item.date.split('/');
              const itemDate = new Date(
                parseInt(itemDateParts[2]),
@@ -40,7 +38,7 @@ export default function ThongKe({navigation}) {
                parseInt(itemDateParts[0])
              );
              if (thang)
-             // Lọc dữ liệu với điều kiện status === false, view === true và item.date nằm trong khoảng thời gian ngay đến ngay + 1 tháng
+             
              return  item.view && isDateWithinRange(itemDate,  addMonths(ngayDate, 1),ngayDate);
               else  return  item.view && isDateWithinRange(itemDate,  addMonths(ngayDate, 12),ngayDate);
            });
@@ -50,55 +48,52 @@ export default function ThongKe({navigation}) {
      
      
      
-     // Hàm kiểm tra xem date có nằm trong khoảng thời gian startDate đến endDate không
+    
      const isDateWithinRange = (date, startDate, endDate) => {
-       // console.log(startDate);
-       // console.log(endDate);
+      
        return date >= startDate && date < endDate;
      };
      
-     // Hàm thêm tháng cho một ngày cụ thể
+    
      const addMonths = (date, months) => {
        const result = new Date(date);
      
-       // Lấy ra thông tin về ngày, tháng và năm
+       
        const currentMonth = result.getMonth()+1;
        const currentYear = result.getFullYear();
        const currentDay = result.getDate();
        
      
-       // Tính toán tháng mới
+      
        const newMonth = ((currentMonth - months + 11) % 12 + 12) % 12;
        const monthsToAdd = Math.floor((months-currentMonth  + 12) / 12);
-       // Tính toán năm mới
+      
        const newYear = currentYear - monthsToAdd;
      
-       // Thiết lập tháng và năm mới
+      
        result.setMonth(newMonth);
        result.setFullYear(newYear);
        
-       // Tránh tình huống khi tháng mới có số ngày ít hơn tháng cũ (đến ngày 31 tháng 1 chẳng hạn)
+       
        const newMonthDays = new Date(newYear, newMonth+1, 0).getDate();
        result.setDate(Math.min(currentDay, newMonthDays));
        return result;
      };
     
-      // Tính tổng chi
+
        const calculateTotalChi = () => {
         return data.reduce((total1, item) => {
           if (!item.status) {
-            // Chi tiêu (status: false)
             return total1 + item.money;
           }
           return total1;
         }, 0);
       };
     
-      // Tính tổng thu
       const calculateTotalThu = () => {
         return data.reduce((total, item) => {
           if (item.status) {
-            // Thu nhập (status: true)
+            
             return total + item.money;
           }
           return total;
@@ -107,7 +102,7 @@ export default function ThongKe({navigation}) {
     
       const totalThu = calculateTotalThu();
       const totalChi = calculateTotalChi();
-      // Tính chênh lệch
+  
       const chenhLech = totalThu - totalChi;
       let formattedChenhLech;
 
@@ -116,7 +111,7 @@ export default function ThongKe({navigation}) {
       } else if (chenhLech < 0) {
         formattedChenhLech = `${chenhLech}`;
       } else {
-        formattedChenhLech = '0'; // Trường hợp chenhLech bằng 0
+        formattedChenhLech = '0'; 
       }
 
     useEffect(() => {
