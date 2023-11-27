@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View,TouchableOpacity,TextInput,Image } from 'react-native';
+import { StyleSheet, Text, View,TouchableOpacity,TextInput,Image,Modal,Button } from 'react-native';
 import DateTimePicker from "react-datetime-picker";
 import 'react-datetime-picker/dist/DateTimePicker.css';
 import 'react-calendar/dist/Calendar.css';
@@ -45,7 +45,7 @@ export default function Sua2({navigation, route}) {
          })
          .then(data => {
            console.log('Thành công:', data);
-           alert('Sửa thành công');
+           setModalVisible(true);
          })
          .catch(error => {
            console.error('Lỗi:', error.message);
@@ -62,6 +62,12 @@ export default function Sua2({navigation, route}) {
    const [name, setName] = useState(data.name);
    const [img, setImg] = useState(data.image);
    const [thu, setThu] = useState(0);  
+
+   const [modalVisible, setModalVisible] = useState(false);
+   const closeModal = () => {
+     setModalVisible(false);
+   };
+
 
   const [thuNhap, setThuNhap] = useState([
     {
@@ -105,13 +111,15 @@ export default function Sua2({navigation, route}) {
     <View style={styles.container}>
        <View >
        
-       <View style={{flexDirection:'row', height: click ? 320 : 40 ,justifyContent:'flex-start',alignItems:'center',marginLeft:20}}>
-           
-           <Text style={styles.Text}>{`${value.getDate()}/${value.getMonth() + 1}/${value.getFullYear()}`}</Text>
-           <TouchableOpacity onPress={clickMouse} style={styles.Buttun2}>
-           <Text style={styles.Text2}>{click ? 'OK' : 'DATE'}</Text>
-             </TouchableOpacity>
-             </View>
+       <View style={{flexDirection:'row', height: click ? 320 : 40 ,justifyContent:'flex-start',alignItems:'center',marginLeft:15}}>
+                <Text style={{fontSize:16, fontWeight:'bold', marginLeft:-3}}>Ngày</Text>
+                <View style={{height:30,width:225, backgroundColor:'#F2F3D6', borderWidth:1,borderRadius:10,marginLeft:30}}>
+                <Text style={styles.Textheader}>{`${value.getDate()}/${value.getMonth() + 1}/${value.getFullYear()}`}</Text>
+                </View>
+              <TouchableOpacity onPress={clickMouse} style={styles.Buttun2}>
+              <Text style={styles.Text2}>{click ? 'OK' : 'CHỌN'}</Text>
+                </TouchableOpacity>
+                </View>
              {click&&( <DateTimePicker
           onChange={setValue}
           value={value}
@@ -119,14 +127,14 @@ export default function Sua2({navigation, route}) {
           onCalendarClose={clickMouse}
      />)}
              <View style={{ height:40,width:'100%',flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
-               <Text style={styles.Text}>Ghi chú </Text>
-               <TextInput style={{borderWidth:1,borderColor:'#808080',backgroundColor:'white',height:'90%', marginLeft:10,width:300}}  onChangeText={(text)=>{setNote(text)}} placeholder='Chưa nhập vào' value={note}></TextInput>
-             </View>
-             <View style={{ height:40,flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
-               <Text style={styles.Text}>Tiền Chi </Text>
-               <TextInput style={{borderWidth:1,borderColor:'#808080',backgroundColor:'white',height:'90%', marginLeft:10,width:250}} value={tien}  onChangeText={(text)=>{ const numericValue = parseFloat(text); setTien(isNaN(numericValue) ? 0 : numericValue)}}></TextInput>
-               <Text>đ</Text>
-              </View> 
+                  <Text style={styles.Text}>Ghi chú </Text>
+                  <TextInput style={{height:30,width:300, backgroundColor:'#F2F3D6', borderWidth:1,borderRadius:10,marginLeft:10, paddingLeft:10}} placeholder='Chưa nhập vào'  onChangeText={(text)=>{setNote(text)} } value={note}></TextInput>
+                </View>
+                <View style={{ height:40,flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
+                  <Text style={styles.Text}>Tiền Thu</Text>
+                  <TextInput style={{height:30,width:226, backgroundColor:'#F2F3D6', borderWidth:1,borderRadius:10,marginLeft:6,paddingLeft:10}} value={tien}  onChangeText={(text)=>{ const numericValue = parseFloat(text); ;Settien(isNaN(numericValue) ? 0 : numericValue)}}></TextInput>
+                  <Text style={{fontSize:16, marginLeft:5}}>₫</Text>
+                 </View> 
               <Text style={styles.Text}>Danh mục </Text>
               <View style={styles.List}> 
                {thuNhap.map((item, index) => (
@@ -139,38 +147,52 @@ export default function Sua2({navigation, route}) {
                  ))}
               </View>
               <View style={{justifyContent:"center",alignItems:"center"}}>
-               <TouchableOpacity style={{borderRadius:25,backgroundColor:'#FFA500',width:'80%',height:50,justifyContent:"center",alignItems:"center"}} onPress={()=>{submitItem()}}>
-                 <Text style={{color:'white'}}>SỬA KHOẢN CHI</Text> </TouchableOpacity>
+               <TouchableOpacity style={{borderRadius:25,backgroundColor:'#FFA500',width:'80%',height:50,justifyContent:"center",alignItems:"center", marginTop:50}} onPress={()=>{submitItem()}}>
+                 <Text style={{color:'white'}}>SỬA KHOẢN THU</Text> </TouchableOpacity>
               </View>
                  
              
             </View>
-            <View style={{width:'100%',height:50,justifyContent:'flex-start',alignItems:'center',flexDirection:'row',bottom:0, position: 'absolute',}}>
-            <TouchableOpacity style={{backgroundColor: 'white',height:"100%",width:'25%',justifyContent:'center',flexDirection:'column',alignItems:'center',borderRadius:5}}   onPress={()=>navigation.navigate('Menu')}>
-         
-                              <Image source={require('../assets/home.png')} style={styles.Img}></Image>
-                              <Text style={{color:'gray'}}>Nhập vào </Text>
-                          
-            </TouchableOpacity>
-             <TouchableOpacity style={{backgroundColor: '#FFA500',height:"100%",width:'25%',justifyContent:'center',flexDirection:'column',alignItems:'center',borderRadius:5}}  >
-         
-                              <Image source={require('../assets/timkiem.png')} style={styles.Img}></Image>
-                              <Text style={{color:'white'}}>Tìm kiếm </Text>
-                          
-            </TouchableOpacity>
-             <TouchableOpacity style={{backgroundColor: 'white',height:"100%",width:'25%',justifyContent:'center',flexDirection:'column',alignItems:'center',borderRadius:5}}  onPress={()=>navigation.navigate('Thongke')} >
-         
-                              <Image source={require('../assets/thongke.png')} style={styles.Img}></Image>
-                              <Text style={{color:'gray'}}>Báo cáo </Text>
-                          
-            </TouchableOpacity>
-             <TouchableOpacity style={{backgroundColor: 'white',height:"100%",width:'25%',justifyContent:'center',flexDirection:'column',alignItems:'center',borderRadius:5}}   onPress={()=>navigation.navigate('Khac')}>
-         
-                              <Image source={require('../assets/khac.png')} style={styles.Img}></Image>
-                              <Text style={{color:'gray'}}>Khác</Text>
-                          
-            </TouchableOpacity>
-           </View>
+            <View style={{width:'100%',height:50,justifyContent:'flex-start',alignItems:'flex-end',flexDirection:'row',bottom:0, position:'absolute'}}>
+              <TouchableOpacity style={{backgroundColor: 'white',height:"100%",width:'25%',justifyContent:'center',flexDirection:'column',alignItems:'center',borderRadius:5}}   onPress={()=>navigation.navigate('Menu')}>
+          
+                                <Image source={require('../assets/home.png')} style={styles.Img}></Image>
+                                <Text style={{color:'gray'}}>Nhập vào </Text>
+                            
+              </TouchableOpacity>
+              <TouchableOpacity style={{backgroundColor: '#FFA500',height:"100%",width:'25%',justifyContent:'center',flexDirection:'column',alignItems:'center',borderRadius:5}}  >
+          
+                                <Image source={require('../assets/timkiem.png')} style={styles.Img}></Image>
+                                <Text style={{color:'white'}}>Tìm kiếm </Text>
+                            
+              </TouchableOpacity>
+              <TouchableOpacity style={{backgroundColor: 'white',height:"100%",width:'25%',justifyContent:'center',flexDirection:'column',alignItems:'center',borderRadius:5}}  onPress={()=>navigation.navigate('Thongke')} >
+          
+                                <Image source={require('../assets/thongke.png')} style={styles.Img}></Image>
+                                <Text style={{color:'gray'}}>Thống kê </Text>
+                            
+              </TouchableOpacity>
+              <TouchableOpacity style={{backgroundColor: 'white',height:"100%",width:'25%',justifyContent:'center',flexDirection:'column',alignItems:'center',borderRadius:5}}   onPress={()=>navigation.navigate('Khac')}>
+          
+                                <Image source={require('../assets/khac.png')} style={styles.Img}></Image>
+                                <Text style={{color:'gray'}}>Khác</Text>
+                            
+              </TouchableOpacity>
+            </View>
+           <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Sửa thành công</Text>
+            <Button title="Đóng" onPress={() => {closeModal();navigation.navigate('Timkiem')}} />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -206,9 +228,9 @@ List:{
 
 },
 Img:{
-  height:'60%',
+  height:'40%',
   width:'100%',
-  marginBottom:5,
+  marginBottom:2,
   resizeMode:'contain'
 },
 Text2:{
@@ -216,12 +238,48 @@ Text2:{
   fontWeight:'bold',
 
 },
-Buttun2:{
-  width:'100',
-  backgroundColor:'#FFA500',
-  borderRadius:8,
-  justifyContent:'center',
-  alignItems:'center',
-  marginLeft:150
+Textheader:{
+  fontSize:16,
+  fontWeight:'bold',
+  textAlign:'center',
+  alignSelf:'center',
+  textAlignVertical:"center",
 },
+Buttun2:{
+    width:60,
+    height:30,
+    backgroundColor:'#F2F3D6',
+    borderRadius:10,
+    borderWidth:1,
+    justifyContent:'center',
+    alignItems:'center',
+    marginLeft:10
+  },
+centeredView: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginTop: 22
+},
+modalView: {
+  margin: 20,
+  backgroundColor: 'white',
+  borderRadius: 20,
+  padding: 35,
+  alignItems: 'center',
+  shadowColor: '#000',
+  shadowOffset: {
+  width: 0,
+  height: 2
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 4,
+  elevation: 5
+},
+modalText: {
+  marginBottom: 15,
+  textAlign: 'center',
+  fontSize: 18,
+  fontWeight: 'bold'
+}
 });

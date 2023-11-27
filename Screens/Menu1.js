@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
-import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View,Image, Fit } from 'react-native';
+import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View,Image, Modal } from 'react-native';
 import DateTimePicker from "react-datetime-picker";
 import 'react-datetime-picker/dist/DateTimePicker.css';
 import 'react-calendar/dist/Calendar.css';
@@ -39,20 +39,27 @@ export default function Menu1({navigation}) {
         .then(response => response.json())
         .then(data => {
           console.log('Success:', data);
-          alert('thêm thành công')
-          // Thực hiện các thao tác cần thiết sau khi gửi thành công
+          setModalVisible(true);
         })
         .catch(error => {
           console.error('Error:', error);
           // Xử lý lỗi khi gửi dữ liệu không thành công
         });
     } else {
-      alert('Lỗi nhập liệu');
+      setModalVisible1(true)
     }
 
   };
-  
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible1, setModalVisible1] = useState(false);
 
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  const closeModal1 = () => {
+    setModalVisible1(false);
+  };
   
   useEffect(() => {
     fetch('https://6551ee245c69a779032948e9.mockapi.io/data')
@@ -165,7 +172,7 @@ export default function Menu1({navigation}) {
             <View style={{borderRadius:8,backgroundColor:'#808080',width:'50%',height:30,flexDirection:'row'}}>
              <TouchableOpacity style={{ width:'50%',backgroundColor:show?"#808080":'#FFA500', borderRadius:8,justifyContent:'center',alignItems:'center'}} onPress={()=>Setshow(false)}>
                  <Text style={{color:show?'#FFA500':'white',fontWeight:'bold'}}>Tiền chi</Text>
-                 
+
              </TouchableOpacity>
              <TouchableOpacity style={{ width:'50%',backgroundColor:show?'#FFA500':"#808080", borderRadius:8,justifyContent:'center',alignItems:'center'}} onPress={()=>Setshow(true)}>
              <Text style={{color:show?'white':'#FFA500',fontWeight:'bold'}}>Tiền thu</Text>
@@ -176,11 +183,14 @@ export default function Menu1({navigation}) {
        
           {!show&&(
             <View style={{flexDirection:'column'}} >
-              <View style={{flexDirection:'row', height: click ? 320 : 40 ,justifyContent:'flex-start',alignItems:'center',marginLeft:20}}>
-           
-              <Text style={styles.Text}>{`${value.getDate()}/${value.getMonth() + 1}/${value.getFullYear()}`}</Text>
+
+              <View style={{flexDirection:'row', height: click ? 320 : 40 ,justifyContent:'flex-start',alignItems:'center',marginLeft:15}}>
+                <Text style={{fontSize:16, fontWeight:'bold', marginLeft:-3}}>Ngày</Text>
+                <View style={{height:30,width:225, backgroundColor:'#F2F3D6', borderWidth:1,borderRadius:10,marginLeft:30}}>
+                <Text style={styles.Textheader}>{`${value.getDate()}/${value.getMonth() + 1}/${value.getFullYear()}`}</Text>
+                </View>
               <TouchableOpacity onPress={clickMouse} style={styles.Buttun2}>
-              <Text style={styles.Text2}>{click ? 'OK' : 'DATE'}</Text>
+              <Text style={styles.Text2}>{click ? 'OK' : 'CHỌN'}</Text>
                 </TouchableOpacity>
                 </View>
                 {click&&( <DateTimePicker
@@ -191,12 +201,12 @@ export default function Menu1({navigation}) {
         />)}
                 <View style={{ height:40,width:'100%',flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
                   <Text style={styles.Text}>Ghi chú </Text>
-                  <TextInput style={{borderWidth:1,borderColor:'#808080',backgroundColor:'white',height:'90%', marginLeft:10,width:300}}  onChangeText={(text)=>{SetNote(text)}} placeholder='Chưa nhập vào'></TextInput>
+                  <TextInput style={{height:30,width:300, backgroundColor:'#F2F3D6', borderWidth:1,borderRadius:10,marginLeft:10, paddingLeft:10}}  onChangeText={(text)=>{SetNote(text)}} placeholder='Chưa nhập vào'></TextInput>
                 </View>
                 <View style={{ height:40,flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
                   <Text style={styles.Text}>Tiền Chi </Text>
-                  <TextInput style={{borderWidth:1,borderColor:'#808080',backgroundColor:'white',height:'90%', marginLeft:10,width:250}} value={tien}  onChangeText={(text)=>{ const numericValue = parseFloat(text); ;Settien(isNaN(numericValue) ? 0 : numericValue)}}></TextInput>
-                  <Text>đ</Text>
+                  <TextInput style={{height:30,width:225, backgroundColor:'#F2F3D6', borderWidth:1,borderRadius:10,marginLeft:7,paddingLeft:10}} value={tien}  onChangeText={(text)=>{ const numericValue = parseFloat(text); ;Settien(isNaN(numericValue) ? 0 : numericValue)}}></TextInput>
+                  <Text style={{fontSize:16, marginLeft:5}}>₫</Text>
                  </View> 
                  <Text style={styles.Text}>Danh mục </Text>
                  <View style={styles.List}> 
@@ -219,13 +229,15 @@ export default function Menu1({navigation}) {
            )}
            {show&&(
             <View>
-               <View style={{flexDirection:'row', height: click ? 320 : 40 ,justifyContent:'flex-start',alignItems:'center',marginLeft:20}}>
-           
-           <Text style={styles.Text}>{`${value.getDate()}/${value.getMonth() + 1}/${value.getFullYear()}`}</Text>
-           <TouchableOpacity onPress={clickMouse} style={styles.Buttun2}>
-           <Text style={styles.Text2}>{click ? 'OK' : 'DATE'}</Text>
-             </TouchableOpacity>
-             </View>
+              <View style={{flexDirection:'row', height: click ? 320 : 40 ,justifyContent:'flex-start',alignItems:'center',marginLeft:15}}>
+                <Text style={{fontSize:16, fontWeight:'bold', marginLeft:-3}}>Ngày</Text>
+                <View style={{height:30,width:225, backgroundColor:'#F2F3D6', borderWidth:1,borderRadius:10,marginLeft:30}}>
+                <Text style={styles.Textheader}>{`${value.getDate()}/${value.getMonth() + 1}/${value.getFullYear()}`}</Text>
+                </View>
+              <TouchableOpacity onPress={clickMouse} style={styles.Buttun2}>
+              <Text style={styles.Text2}>{click ? 'OK' : 'CHỌN'}</Text>
+                </TouchableOpacity>
+                </View>
              {click&&( <DateTimePicker
          onChange={setValue}
          value={value}
@@ -234,12 +246,12 @@ export default function Menu1({navigation}) {
      />)}
                 <View style={{ height:40,width:'100%',flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
                   <Text style={styles.Text}>Ghi chú </Text>
-                  <TextInput style={{borderWidth:1,borderColor:'#808080',backgroundColor:'white',height:'90%', marginLeft:10,width:300}} placeholder='Chưa nhập vào'  onChangeText={(text)=>{SetNote(text)}}></TextInput>
+                  <TextInput style={{height:30,width:300, backgroundColor:'#F2F3D6', borderWidth:1,borderRadius:10,marginLeft:10, paddingLeft:10}} placeholder='Chưa nhập vào'  onChangeText={(text)=>{SetNote(text)}}></TextInput>
                 </View>
                 <View style={{ height:40,flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
-                  <Text style={styles.Text}>Tiền Thu </Text>
-                  <TextInput style={{borderWidth:1,borderColor:'#808080',backgroundColor:'white',height:'90%', marginLeft:10,width:250}} value={tien}  onChangeText={(text)=>{ const numericValue = parseFloat(text); ;Settien(isNaN(numericValue) ? 0 : numericValue)}}></TextInput>
-                  <Text>đ</Text>
+                  <Text style={styles.Text}>Tiền Thu</Text>
+                  <TextInput style={{height:30,width:226, backgroundColor:'#F2F3D6', borderWidth:1,borderRadius:10,marginLeft:6,paddingLeft:10}} value={tien}  onChangeText={(text)=>{ const numericValue = parseFloat(text); ;Settien(isNaN(numericValue) ? 0 : numericValue)}}></TextInput>
+                  <Text style={{fontSize:16, marginLeft:5}}>₫</Text>
                  </View> 
                  <Text style={styles.Text}>Danh mục </Text>
                  <View style={styles.List}> 
@@ -278,7 +290,7 @@ export default function Menu1({navigation}) {
              <TouchableOpacity style={{backgroundColor: 'white',height:"100%",width:'25%',justifyContent:'center',flexDirection:'column',alignItems:'center',borderRadius:5}} onPress={()=>navigation.navigate('Thongke')} >
          
                               <Image source={require('../assets/thongke.png')} style={styles.Img}></Image>
-                              <Text style={{color:'gray'}}>Báo cáo </Text>
+                              <Text style={{color:'gray'}}>Thống kê </Text>
                           
             </TouchableOpacity>
              <TouchableOpacity style={{backgroundColor: 'white',height:"100%",width:'25%',justifyContent:'center',flexDirection:'column',alignItems:'center',borderRadius:5}}  onPress={()=>navigation.navigate('Khac')}>
@@ -288,7 +300,36 @@ export default function Menu1({navigation}) {
                           
             </TouchableOpacity>
            </View>
-        
+        <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Thêm thành công</Text>
+            <Button title="Đóng" onPress={() => closeModal()} />
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible1}
+        onRequestClose={() => {
+          setModalVisible1(!modalVisible1);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Lỗi nhập liệu</Text>
+            <Button title="Đóng" onPress={() => closeModal1()} />
+          </View>
+        </View>
+      </Modal>
+
        </View>
   );
 }
@@ -318,7 +359,13 @@ const styles = StyleSheet.create({
   Text2:{
     fontSize:16,
     fontWeight:'bold',
-
+},
+Textheader:{
+  fontSize:16,
+  fontWeight:'bold',
+  textAlign:'center',
+  alignSelf:'center',
+  textAlignVertical:"center",
 },
   Input:{
     backgroundColor:'#E6E6E6',
@@ -328,12 +375,14 @@ const styles = StyleSheet.create({
     marginRight:20
   },
   Buttun2:{
-    width:'100',
-    backgroundColor:'#FFA500',
-    borderRadius:8,
+    width:60,
+    height:30,
+    backgroundColor:'#F2F3D6',
+    borderRadius:10,
+    borderWidth:1,
     justifyContent:'center',
     alignItems:'center',
-    marginLeft:150
+    marginLeft:10
   },
   List:{
     backgroundColor:'#E6E6E6',
@@ -353,4 +402,31 @@ const styles = StyleSheet.create({
     marginBottom:2,
     resizeMode:'contain'
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+    width: 0,
+    height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: 'bold'
+  }
 });

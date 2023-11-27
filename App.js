@@ -8,7 +8,6 @@
   import Sua2 from './Screens/SuaThuNhap';
   import { createNativeStackNavigator } from '@react-navigation/native-stack';
   import { NavigationContainer } from '@react-navigation/native';
-  import Datepicker from './Screens/Datepicker';
  import DoughnutChart from './Screens/ChartChi';
  import { useState,useEffect } from 'react';
 
@@ -18,12 +17,12 @@
      
   
     return (
-      // <View style={styles.container}>
+      //  <View style={styles.container}>
       //   {/* <TEST></TEST> */}
-      //   {/* <DoughnutChart></DoughnutChart> */}
+      //    {/* <DoughnutChart></DoughnutChart> */}
       //   {/* <Datepicker></Datepicker> */}
-      // {/* <Menu1></Menu1> */}
-      //   <ThongKe></ThongKe>
+      //  {/* <Menu1></Menu1> */}
+      //    {/* <ThongKe></ThongKe> */}
       //   {/* <Khac></Khac> */}
       //   {/* <Sua></Sua> */}
       //   {/* <Sua2></Sua2> */}

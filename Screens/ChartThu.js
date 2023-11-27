@@ -9,18 +9,13 @@ const DoughnutChart =  ({ ngay, months }) => {
   const [data, setData] = useState([]);
   const [data2, setData2] = useState([]);
   
-  // console.log(ngay)
-  // console.log(months)
+ 
   useEffect(() => {
    fetch('https://6551ee245c69a779032948e9.mockapi.io/data')
      .then((response) => response.json())
      .then((json) => {
-       const dataChi = json.filter((item) => {
-         // Chuyển đổi giá trị ngay thành đối tượng Date
-         
+       const dataChi = json.filter((item) => {  
          const ngayDate = ngay;
- 
-         // Chuyển đổi giá trị item.date thành đối tượng Date
          const itemDateParts = item.date.split('/');
          const itemDate = new Date(
            parseInt(itemDateParts[2]),
@@ -150,7 +145,7 @@ console.log(data)
         {data2.map((item, index) => (
           <li key={item.id} style={{ color: backgroundColors[index] }}>
                       <FontAwesomeIcon icon={faSquare} style={{width:50}} />
-                      {item.name}: {item.money}
+                      {item.name}: {item.money}đ 
           </li>
         ))}
       </ul>

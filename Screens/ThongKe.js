@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View ,TouchableOpacity,TextInput, Image,ScrollView} from 'react-native';
 import { useState,useEffect } from 'react';
-import Datepicker from './Datepicker';
 import DoughnutChart from './ChartThu';
 import DoughnutChart2, { CalculateTotalChi } from './ChartChi';
   import { Doughnut } from 'react-chartjs-2';
@@ -110,6 +109,16 @@ export default function ThongKe({navigation}) {
       const totalChi = calculateTotalChi();
       // Tính chênh lệch
       const chenhLech = totalThu - totalChi;
+      let formattedChenhLech;
+
+      if (chenhLech > 0) {
+        formattedChenhLech = `+${chenhLech}`;
+      } else if (chenhLech < 0) {
+        formattedChenhLech = `${chenhLech}`;
+      } else {
+        formattedChenhLech = '0'; // Trường hợp chenhLech bằng 0
+      }
+
     useEffect(() => {
       setNgay(value)
   },[value])
@@ -131,13 +140,16 @@ export default function ThongKe({navigation}) {
          </View>
          {thang&&(
             <View >
-              <View style={{flexDirection:'column', width:'80%'}}>
-              <View style={{flexDirection:'row', height: click ? 320 : 40 ,justifyContent:'flex-start',alignItems:'center',marginLeft:20}}>
-           <Text style={styles.Text2}>{`${value.getDate()}/${value.getMonth() + 1}/${value.getFullYear()}`}</Text>
-           <TouchableOpacity onPress={clickMouse} style={styles.Buttun2}>
-           <Text style={styles.Text2}>{click ? 'OK' : 'DATE'}</Text>
-             </TouchableOpacity>
-             </View >
+              <View style={{flexDirection:'column'}}>
+              <View style={{flexDirection:'row', height: click ? 320 : 40 ,justifyContent:'flex-start',alignItems:'center',marginLeft:15}}>
+                <Text style={{fontSize:16, fontWeight:'bold', marginLeft:-3}}>Ngày</Text>
+                <View style={{height:30,width:225, backgroundColor:'#F2F3D6', borderWidth:1,borderRadius:10,marginLeft:30}}>
+                <Text style={styles.Textheader}>{`${value.getDate()}/${value.getMonth() + 1}/${value.getFullYear()}`}</Text>
+                </View>
+              <TouchableOpacity onPress={clickMouse} style={styles.Buttun2}>
+              <Text style={styles.Text2}>{click ? 'OK' : 'CHỌN'}</Text>
+                </TouchableOpacity>
+                </View>
              {click&&( <DateTimePicker
          onChange={setValue}
          value={value}
@@ -146,24 +158,24 @@ export default function ThongKe({navigation}) {
      />)}
               </View>
               <View style={{flexDirection:'row',justifyContent:'flex-start',height:30}}>
-                    <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',backgroundColor:"E6E6E6",width:'48%'}}>
+                    <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',backgroundColor:"E6E6E6",width:'45.5%', borderWidth:1, borderRadius:5,marginLeft:10}}>
                    
                         <Text style={styles.Text}>Chi tiêu</Text>
-                        {totalChi}
-                        <Text>đ</Text>
+                        <Text style={{color:'#F55E02', fontWeight:'bold',marginLeft:0}}>-{totalChi}</Text>
+                        <Text style={{color:'#F55E02',fontWeight:'bold'}}>đ</Text>
                     </View>
-                    <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',backgroundColor:"E6E6E6",width:'48%'}}>
+                    <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',backgroundColor:"E6E6E6",width:'45.5%', borderWidth:1, borderRadius:5, marginLeft:10}}>
                         <Text style={styles.Text}>Thu nhập</Text>
-                        {totalThu}
-                        <Text>đ</Text>
+                        <Text style={{color:'#02AFF5',fontWeight:'bold',marginLeft:-10}}>+{totalThu}</Text>
+                        <Text style={{color:'#02AFF5',fontWeight:'bold'}}>đ</Text>
                     </View>
               </View>
-              <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',backgroundColor:"E6E6E6",height:50,width:'100%'}}>
+              <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',backgroundColor:"E6E6E6",width:'94%',height:30, marginTop:4, borderWidth:1, borderRadius:5, marginLeft:10}}>
                         <Text style={styles.Text}>Chênh lệch thu chi</Text>
-                        <Text >{chenhLech}</Text>
-                        <Text>đ</Text>
+                        <Text style={{color:'#72B96E',fontWeight:'bold',marginLeft:82}}>{formattedChenhLech}</Text>
+                        <Text style={{color:'#72B96E',fontWeight:'bold'}}>đ</Text>
               </View>
-              <View style={{width:'100%',height:50, justifyContent:'flex-start',alignItems:'center',flexDirection:"row"}}>
+              <View style={{width:'100%',height:50, justifyContent:'flex-start',alignItems:'center',flexDirection:"row", marginTop:4}}>
                 <TouchableOpacity style={{backgroundColor:show?'#E6E6E6':'white',width:'50%',height:50,alignItems:'center',justifyContent:"center",flexDirection:'row'}} onPress={()=>setShow(false)}>
                 <Image source={require('../assets/tienluong.png')} style={{height:'50%',width:'30%',resizeMode:'contain',color:show?'gray':'#FFA500'}}></Image>
                  <Text style={{color:show?'gray':'#FFA500',fontWeight:'bold'}}>Chi tiêu</Text>
@@ -193,13 +205,16 @@ export default function ThongKe({navigation}) {
            )}
            {!thang&&(
             <View >
-              <View style={{flexDirection:'column', width:'80%'}}>
-              <View style={{flexDirection:'row', height: click ? 320 : 40 ,justifyContent:'flex-start',alignItems:'center',marginLeft:20}}>
-           <Text style={styles.Text2}>{`${value.getDate()}/${value.getMonth() + 1}/${value.getFullYear()}`}</Text>
-           <TouchableOpacity onPress={clickMouse} style={styles.Buttun2}>
-           <Text style={styles.Text2}>{click ? 'OK' : 'DATE'}</Text>
-             </TouchableOpacity>
-             </View>
+              <View style={{flexDirection:'column'}}>
+              <View style={{flexDirection:'row', height: click ? 320 : 40 ,justifyContent:'flex-start',alignItems:'center',marginLeft:15}}>
+                <Text style={{fontSize:16, fontWeight:'bold', marginLeft:-3}}>Ngày</Text>
+                <View style={{height:30,width:225, backgroundColor:'#F2F3D6', borderWidth:1,borderRadius:10,marginLeft:30}}>
+                <Text style={styles.Textheader}>{`${value.getDate()}/${value.getMonth() + 1}/${value.getFullYear()}`}</Text>
+                </View>
+              <TouchableOpacity onPress={clickMouse} style={styles.Buttun2}>
+              <Text style={styles.Text2}>{click ? 'OK' : 'CHỌN'}</Text>
+                </TouchableOpacity>
+                </View>
              {click&&( <DateTimePicker
          onChange={setValue}
          value={value}
@@ -208,23 +223,24 @@ export default function ThongKe({navigation}) {
      />)}
               </View>
               <View style={{flexDirection:'row',justifyContent:'flex-start',height:30}}>
-                    <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',backgroundColor:"E6E6E6",width:'48%'}}>
+                    <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',backgroundColor:"E6E6E6",width:'45.5%', borderWidth:1, borderRadius:5,marginLeft:10}}>
+                   
                         <Text style={styles.Text}>Chi tiêu</Text>
-                        {totalChi}
-                        <Text>đ</Text>
+                        <Text style={{color:'#F55E02', fontWeight:'bold',marginLeft:0}}>-{totalChi}</Text>
+                        <Text style={{color:'#F55E02',fontWeight:'bold'}}>đ</Text>
                     </View>
-                    <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',backgroundColor:"E6E6E6",width:'48%'}}>
+                    <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',backgroundColor:"E6E6E6",width:'45.5%', borderWidth:1, borderRadius:5, marginLeft:10}}>
                         <Text style={styles.Text}>Thu nhập</Text>
-                       {totalThu}
-                        <Text>đ</Text>
+                        <Text style={{color:'#02AFF5',fontWeight:'bold',marginLeft:-10}}>+{totalThu}</Text>
+                        <Text style={{color:'#02AFF5',fontWeight:'bold'}}>đ</Text>
                     </View>
               </View>
-              <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',backgroundColor:"E6E6E6",height:50,width:'100%'}}>
-              <Text style={styles.Text}>Chênh lệch thu chi</Text>
-                        <Text >{chenhLech}</Text>
-                        <Text>đ</Text>
+              <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',backgroundColor:"E6E6E6",width:'94%',height:30, marginTop:4, borderWidth:1, borderRadius:5, marginLeft:10}}>
+                        <Text style={styles.Text}>Chênh lệch thu chi</Text>
+                        <Text style={{color:'#72B96E',fontWeight:'bold',marginLeft:82}}>{formattedChenhLech}</Text>
+                        <Text style={{color:'#72B96E',fontWeight:'bold'}}>đ</Text>
               </View>
-              <View style={{width:'100%',height:50, justifyContent:'flex-start',alignItems:'center',flexDirection:"row"}}>
+              <View style={{width:'100%',height:50, justifyContent:'flex-start',alignItems:'center',flexDirection:"row", marginTop:4}}>
                 <TouchableOpacity style={{backgroundColor:show2?'#E6E6E6':'white',width:'50%',height:50,alignItems:'center',justifyContent:"center",flexDirection:'row'}} onPress={()=>setShow2(false)}>
                 <Image source={require('../assets/tienluong.png')} style={{height:'50%',width:'30%',resizeMode:'contain'}}></Image>
                  <Text style={{color:show2?'gray':'#FFA500',fontWeight:'bold'}}>Chi tiêu</Text>
@@ -267,7 +283,7 @@ export default function ThongKe({navigation}) {
              <TouchableOpacity style={{backgroundColor: '#FFA500',height:"100%",width:'25%',justifyContent:'center',flexDirection:'column',alignItems:'center',borderRadius:5}}  >
          
                               <Image source={require('../assets/thongke.png')} style={styles.Img}></Image>
-                              <Text style={{color:'white'}}>Báo cáo </Text>
+                              <Text style={{color:'white'}}>Thống kê </Text>
                           
             </TouchableOpacity>
              <TouchableOpacity style={{backgroundColor: 'white',height:"100%",width:'25%',justifyContent:'center',flexDirection:'column',alignItems:'center',borderRadius:5}}   onPress={()=>navigation.navigate('Khac')}>
@@ -293,10 +309,10 @@ const styles = StyleSheet.create({
    
 },
   Text:{
-    fontSize:12,
+    fontSize:16,
     fontWeight:'bold',
-    marginLeft:10,
-    width:"30%"
+    marginLeft:5,
+    width:"50%"
 },
   Buttun:{
     width:'50%',
@@ -306,12 +322,21 @@ const styles = StyleSheet.create({
     alignItems:'center'
   },
   Buttun2:{
-    width:'100',
-    backgroundColor:'#FFA500',
-    borderRadius:8,
+    width:60,
+    height:30,
+    backgroundColor:'#F2F3D6',
+    borderRadius:10,
+    borderWidth:1,
     justifyContent:'center',
     alignItems:'center',
-    marginLeft:150
+    marginLeft:10
+  },
+  Textheader:{
+    fontSize:16,
+    fontWeight:'bold',
+    textAlign:'center',
+    alignSelf:'center',
+    textAlignVertical:"center",
   },
   Touch:{
     width:'50%',

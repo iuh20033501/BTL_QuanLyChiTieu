@@ -8,11 +8,11 @@ import Sua from './SuaChiTieu';
     const[nhap,setNhap]= useState(null);
     const[data,setData] = useState([]);
     const [searchResults, setSearchResults] = useState([]);
-    const[click,setClick] = useState(false);
+   // const[click,setClick] = useState(false);
     const [deletedData, setDeletedData] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
-
     const [fetchingData, setFetchingData] = useState(false);
+    const [data2,setData2] = useState([]);
 
 
     useEffect(() => {
@@ -22,16 +22,18 @@ import Sua from './SuaChiTieu';
           // Lọc chỉ những mục có thuộc tính view là true
           const filteredData = json.filter((item) => item.view === true);
           setData(filteredData);
+          setData2(filteredData);
         })
         .catch((error) => {
           console.error('Lỗi khi lấy dữ liệu:', error.message);
         });
-    }, [click]);
+    }, []);
 
     const getStatusText = (status) => {
       return status ? 'Thu nhập' : 'Chi tiêu';
     };
     
+
 
       // Tính tổng chi
       const calculateTotalChi = () => {
@@ -59,17 +61,28 @@ import Sua from './SuaChiTieu';
       const totalChi = calculateTotalChi();
       // Tính chênh lệch
       const chenhLech = totalThu - totalChi;
+      let formattedChenhLech;
+
+      if (chenhLech > 0) {
+        formattedChenhLech = `+${chenhLech}`;
+      } else if (chenhLech < 0) {
+        formattedChenhLech = `${chenhLech}`;
+      } else {
+        formattedChenhLech = '0'; // Trường hợp chenhLech bằng 0
+      }
 
       const handleSearch = () => {
       
         if (!nhap) {
-          setSearchResults(data); // Nếu ô tìm kiếm trống, hiển thị toàn bộ dữ liệu
+          setData2(data); // Nếu ô tìm kiếm trống, hiển thị toàn bộ dữ liệu
         } else {
           // Sử dụng filter để tìm kiếm gần đúng theo tên
           const results = data.filter((item) =>
-            item.name.toLowerCase().includes(nhap.toLowerCase())
+            item.name.toLowerCase().includes(nhap.toLowerCase()) ||
+            item.notice.toLowerCase().includes(nhap.toLowerCase())
+
           );
-          setSearchResults(results);
+          setData2(results);
         }
       };
 
@@ -101,7 +114,7 @@ import Sua from './SuaChiTieu';
       };
   
 
-  useEffect(() => {
+  useEffect(() => { 
   const fetchData = async () => {
     try {
       const response = await fetch('https://6551ee245c69a779032948e9.mockapi.io/data');
@@ -140,7 +153,7 @@ const handleEditItem = (item) => {
           <View style={{ justifyContent: 'flex-start', alignItems: 'center', height: 50, width: '100%', borderColor: 'gray', flexDirection: 'row' }}>
           <TextInput
             style={styles.Input}
-            placeholder="  Tìm kiếm"
+            placeholder="  Tìm kiếm theo tên hoặc theo ghi chú"
             onChangeText={(text) => setNhap(text)}
           />
           <TouchableOpacity
@@ -148,7 +161,7 @@ const handleEditItem = (item) => {
               width: '15%', height: '90%', borderRadius: 8, marginLeft: 5, alignItems: 'center', justifyContent: 'center', backgroundColor: '#FFA500'
             }}
             onPress={() => {
-              handleSearch(); 
+              handleSearch();
             }}
           >
             <Image source={require('../assets/timkiem.png')} style={{ resizeMode: 'contain', height: '80%', width: '80%' }} />
@@ -158,20 +171,20 @@ const handleEditItem = (item) => {
               
                   <View style={{justifyContent:'center',alignItems:'center',flexDirection:'column',height:'100%',width:'33%'}}>
                   <Text style={{fontSize:'10',color:'gray'}}>Thu nhập</Text>
-                  <Text style={{fontSize:'20',color:'blue',fontWeight:'bold'}}>{totalThu}đ</Text>
+                  <Text style={{fontSize:'20',color:'#02AFF5',fontWeight:'bold'}}>{totalThu}đ</Text>
                   </View>
                   <View style={{justifyContent:'center',alignItems:'center',flexDirection:'column',height:'100%',width:'33%'}}>
                   <Text style={{fontSize:'10',color:'gray'}}>Chi tiêu</Text>
-                  <Text style={{fontSize:'20',color:'red',fontWeight:'bold'}}>{totalChi}đ</Text>
+                  <Text style={{fontSize:'20',color:'#F55E02',fontWeight:'bold'}}>{totalChi}đ</Text>
                   </View>
                   <View style={{justifyContent:'center',alignItems:'center',flexDirection:'column',height:'100%',width:'33%'}}>
                   <Text style={{fontSize:'10',color:'gray'}}>Chênh lệch</Text>
-                  <Text style={{fontSize:'20',color:'#FFA500',fontWeight:'bold'}}>+{chenhLech}đ</Text>
+                  <Text style={{fontSize:'20',color:'#72B96E',fontWeight:'bold'}}>{formattedChenhLech}đ</Text>
                   </View>
           </View>
           <View style ={{bottom:0, position:'relative'}}>
           <ScrollView style={{width:'100%',height:380}}>
-            {searchResults.map((item, index) => {
+            {data2.map((item, index) => {
               return (
                 <View key={index}>
                   <View style={styles.Textbox}>
@@ -179,11 +192,11 @@ const handleEditItem = (item) => {
                     <Text key={index}>Ghi chú: {item.notice}</Text>
                     <Text key={index} style={{ position: 'absolute', alignSelf: 'flex-end' }}>Giá: {item.money}đ</Text>
                     <Text  key={index} style={{ position: 'absolute', alignSelf: 'flex-end', marginTop: 20 }}>Loại: {getStatusText(item.status)}</Text>
-                    <TouchableOpacity style={{ width:'10%' ,borderWidth:1, backgroundColor:'white'}} onPress={() => handleDeleteItem(item.id)}>
-                    <Text  style={{ color: 'red', alignSelf:'center' }}>Xóa</Text> 
+                    <TouchableOpacity style={{ width:'10%' ,borderWidth:1, backgroundColor:'white',borderRadius:5, borderWidth:1,marginTop:5 }} onPress={() => handleDeleteItem(item.id)}>
+                    <Text  style={{ color: 'red', alignSelf:'center'}}>Xóa</Text> 
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{ width:'10%' ,borderWidth:1, backgroundColor:'white', position: 'absolute', alignSelf: 'flex-end', marginTop:40}} onPress={() => handleEditItem(item)}>
+                    <TouchableOpacity style={{ width:'10%' ,borderWidth:1, backgroundColor:'white', position: 'absolute', alignSelf: 'flex-end', marginTop:45,borderRadius:5, borderWidth:1}} onPress={() => handleEditItem(item)}>
                     <Text Text  style={{ color: 'green', alignSelf:'center'}}>Sửa</Text> 
                     </TouchableOpacity>
                   </View>
@@ -208,7 +221,7 @@ const handleEditItem = (item) => {
               <TouchableOpacity style={{backgroundColor: 'white',height:"100%",width:'25%',justifyContent:'center',flexDirection:'column',alignItems:'center',borderRadius:5}}  onPress={()=>navigation.navigate('Thongke')} >
           
                                 <Image source={require('../assets/thongke.png')} style={styles.Img}></Image>
-                                <Text style={{color:'gray'}}>Báo cáo </Text>
+                                <Text style={{color:'gray'}}>Thống kê </Text>
                             
               </TouchableOpacity>
               <TouchableOpacity style={{backgroundColor: 'white',height:"100%",width:'25%',justifyContent:'center',flexDirection:'column',alignItems:'center',borderRadius:5}}   onPress={()=>navigation.navigate('Khac')}>
